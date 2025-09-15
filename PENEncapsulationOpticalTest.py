@@ -1,3 +1,5 @@
+#!/Users/maninder/Desktop/Programs/remage/build/python_venv/bin/python
+
 import math
 import pyg4ometry.geant4 as g4
 import pyg4ometry.geant4.solid as solid
@@ -99,11 +101,13 @@ reg.setWorld(world_l)
 # -----------------------------
 # LAr volume (cylinder)
 # -----------------------------
-lar_radius = 15
-lar_half_height = 30
+lar_radius = 12
+lar_half_height = 25
 lar_s = solid.Tubs("LAr_s", 0, lar_radius, lar_half_height, 0, 2*math.pi, registry=reg, lunit="cm")
 lar_l = g4.LogicalVolume(lar_s, lar, "LAr_lv", registry=reg, lunit="cm")
-g4.PhysicalVolume([0,0,0], [0,0,0], lar_l, "LAr_pv", world_l, registry=reg)
+lar_pv = g4.PhysicalVolume([0,0,0], [0,0,0], lar_l, "LAr_pv", world_l, registry=reg)
+
+
 
 # -----------------------------
 # HPGe metadata
@@ -181,19 +185,23 @@ def create_pen_with_bottom(det_meta, det_pos, name_prefix, det_id,
     bottom_pv = g4.PhysicalVolume([0,0,0], bottom_pos, bottom_l, f"{name_prefix}_bottom_pv",
                                   lar_l, registry=reg)
 
+# Register PEN wall as scintillator
+    wall_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", det_id, {"name": name_prefix})
+
     effective_height = height + bottom_thickness
     return wall_pv, bottom_pv, bottom_pos_z
 
 # -----------------------------
 # Create PEN volumes
 # -----------------------------
+
 wall_pv_bege, bottom_pv_bege, pen_bege_half_height = create_pen_with_bottom(
     bege_meta, bege_pos, "PEN_BEGe", 3, margin=0.1, thickness=0.2, bottom_thickness=0.2
 )
 wall_pv_coax, bottom_pv_coax, pen_coax_half_height = create_pen_with_bottom(
     coax_meta, coax_pos, "PEN_Coax", 4, margin=0.1, thickness=0.2, bottom_thickness=0.2
 )
-
+'''
 def create_pmt_under_pen(det_pos, pen_half_height, name_prefix, det_id, gap=0.1):
     """
     Places a PMT exactly `gap` cm below the bottom of a PEN shell.
@@ -222,6 +230,71 @@ def create_pmt_under_pen(det_pos, pen_half_height, name_prefix, det_id, gap=0.1)
     pmt_pv = g4.PhysicalVolume([0,0,0], pmt_pos, pmt_l, f"{name_prefix}_pv", lar_l, registry=reg)
     pmt_pv.pygeom_active_detector = RemageDetectorInfo("optical", det_id, {"name": name_prefix})
 
+    # --- Add optical surface ---
+    surf = g4.solid.OpticalSurface(
+        f"{name_prefix}_surface",
+        finish="ground",
+        model="unified",
+        surf_type="dielectric_metal",
+        value=0,
+        registry=reg
+    )
+    surf.addVecProperty("EFFICIENCY", [400, 600], [1, 1])    # 100% detection efficiency
+    surf.addVecProperty("REFLECTIVITY", [1, 10], [0, 0])  # no reflection
+    g4.SkinSurface(f"{name_prefix}_skin", pmt_l, surf, registry=reg)
+
+    print(
+        f"[DEBUG] {name_prefix}: det_z={det_z:.2f} cm, pen_half_height={pen_half_height:.2f} cm, "
+        f"pen_bottom_z={pen_bottom_z:.2f} cm, pmt_center_z={pmt_center_z:.2f} cm"
+    )
+
+    return pmt_pv
+
+'''
+
+def create_pmt_under_pen(det_pos, pen_half_height, name_prefix, det_id, gap=0.1):
+    """
+    Places a PMT exactly `gap` cm below the bottom of a PEN shell.
+    Default gap = 0.1 cm = 1 mm.
+    """
+    # PMT geometry
+    side_half = 2.54     # cm (PMT is 5.08x5.08 cm square)
+    thickness = 0.5      # cm total thickness
+    half_thickness = thickness / 2.0
+
+    # Detector center (in cm)
+    det_x, det_y, det_z = float(det_pos[0]), float(det_pos[1]), float(det_pos[2])
+
+    # PEN bottom z (you already had this correct!)
+    pen_bottom_z = pen_half_height
+
+    # PMT center = PEN bottom - gap - half_thickness
+    pmt_center_z = pen_bottom_z - gap - half_thickness
+
+    # Solid: pass half-extents
+    pmt_s = solid.Box(f"{name_prefix}_s", side_half, side_half, half_thickness, registry=reg, lunit="cm")
+    pmt_l = g4.LogicalVolume(pmt_s, "G4_Galactic", f"{name_prefix}_lv", registry=reg)
+    pmt_pos = [det_x, det_y, pmt_center_z, "cm"]
+
+    # Place physical volume
+    pmt_pv = g4.PhysicalVolume([0,0,0], pmt_pos, pmt_l, f"{name_prefix}_pv", lar_l, registry=reg)
+
+    # --- Register as optical detector (this is the key line) ---
+    pmt_pv.pygeom_active_detector = RemageDetectorInfo("optical", det_id, {"name": name_prefix})
+
+    # --- Add optical surface ---
+    surf = g4.solid.OpticalSurface(
+        f"{name_prefix}_surface",
+        finish="ground",
+        model="unified",
+        surf_type="dielectric_metal",
+        value=0,
+        registry=reg
+    )
+    surf.addVecProperty("EFFICIENCY", [400, 600], [1, 1])    # 100% detection efficiency
+    surf.addVecProperty("REFLECTIVITY", [1, 10], [0, 0])     # no reflection
+    g4.SkinSurface(f"{name_prefix}_skin", pmt_l, surf, registry=reg)
+
     print(
         f"[DEBUG] {name_prefix}: det_z={det_z:.2f} cm, pen_half_height={pen_half_height:.2f} cm, "
         f"pen_bottom_z={pen_bottom_z:.2f} cm, pmt_center_z={pmt_center_z:.2f} cm"
@@ -245,6 +318,21 @@ coax_pv.pygeom_active_detector = pygeomtools.RemageDetectorInfo(
     coax_meta,
 )
 
+# PEN walls as scintillators
+wall_pv_bege.pygeom_active_detector = RemageDetectorInfo("scintillator", 3, {"name": "PEN_BEGe_wall"})
+wall_pv_coax.pygeom_active_detector = RemageDetectorInfo("scintillator", 5, {"name": "PEN_Coax_wall"})
+
+# PEN bottom plates as scintillators
+bottom_pv_bege.pygeom_active_detector = RemageDetectorInfo("scintillator", 4, {"name": "PEN_BEGe_bottom"})
+bottom_pv_coax.pygeom_active_detector = RemageDetectorInfo("scintillator", 6, {"name": "PEN_Coax_bottom"})
+
+# PMTs as optical
+pmt_bege_pv.pygeom_active_detector = RemageDetectorInfo("optical", 7, {"name": "PMT_BEGe"})
+pmt_coax_pv.pygeom_active_detector = RemageDetectorInfo("optical", 8, {"name": "PMT_Coax"})
+
+# Optional: LAr as scintillator
+lar_l.pygeom_active_detector = RemageDetectorInfo("scintillator", 9, {"name": "LAr"})
+
 
 # -----------------------------
 # Add detector origins
@@ -252,7 +340,7 @@ coax_pv.pygeom_active_detector = pygeomtools.RemageDetectorInfo(
 for pv in [bege_pv, coax_pv,
            wall_pv_bege, bottom_pv_bege,
            wall_pv_coax, bottom_pv_coax,
-           pmt_bege_pv, pmt_coax_pv]:
+           pmt_bege_pv, pmt_coax_pv, lar_pv]:
     add_detector_origin(pv.name, pv, reg)
 
 
