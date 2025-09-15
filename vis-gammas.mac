@@ -1,0 +1,66 @@
+######################################################
+# Logging
+######################################################
+/RMG/Manager/Logging/LogLevel detail
+
+######################################################
+# Geometry setup
+######################################################
+/RMG/Geometry/RegisterDetector Germanium BEGe 001
+/RMG/Geometry/RegisterDetector Germanium Coax 002
+#/RMG/Geometry/RegisterDetector Scintillator LAr 003
+/RMG/Geometry/RegisterDetector Scintillator PEN_Coax 003
+/RMG/Geometry/RegisterDetector Scintillator PEN_BEGe 004
+
+/run/initialize
+
+######################################################
+# Visualization setup (RMG safe)
+######################################################
+/vis/open OGL
+
+# Geometry style
+/vis/viewer/set/style wireframe
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/lineSegmentsPerCircle 100
+
+# Draw the volume
+/vis/drawVolume
+
+# Background and default color
+/vis/viewer/set/background white
+/vis/viewer/set/defaultColour 0.5 0.5 0.5  # grey for everything
+
+# Add coordinate axes
+/vis/scene/add/axes 0 0 0 100 mm
+
+# Camera viewpoint and zoom
+/vis/viewer/set/viewpointThetaPhi 90 0
+/vis/viewer/zoom 1.2
+
+######################################################
+# Event visualization
+######################################################
+/vis/scene/add/trajectories smooth
+/vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate
+
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+######################################################
+# Source setup
+######################################################
+/RMG/Generator/Confine Volume
+/RMG/Generator/Confinement/Physical/AddVolume Source
+
+/RMG/Generator/Select GPS
+/gps/particle gamma
+/gps/ang/type iso
+/gps/energy 1000 keV
+
+######################################################
+# Run
+######################################################
+/run/beamOn 1000

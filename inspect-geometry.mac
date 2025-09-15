@@ -1,0 +1,8 @@
+/RMG/Geometry/IncludeGDMLFile geometry.gdml
+/run/initialize
+
+/RMG/Geometry/PrintListOfLogicalVolumes
+/RMG/Geometry/PrintListOfPhysicalVolumes
+
+
+

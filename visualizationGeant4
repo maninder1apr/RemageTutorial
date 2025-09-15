@@ -1,0 +1,124 @@
+[32m[Summary -> [0mLoading macro file: vis-gammas.mac
+[34m[Detail --> [0mReading geometry.gdml GDML file
+G4GDML: Reading 'geometry.gdml'...
+G4GDML: Reading definitions...
+G4GDML: Reading materials...
+G4GDML: Reading solids...
+G4GDML: Reading structure...
+G4GDML: Reading userinfo...
+G4GDML: Reading setup...
+G4GDML: Reading 'geometry.gdml' done!
+Stripping off GDML names of materials, solids and volumes ...
+[32m[Summary -> [0mChecking for overlaps in GDML geometry..
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'BEGe'['0'
+
+[34m[Detail --> [0mFound 'BEGe[0]' matching the patter
+
+[34m[Detail --> [0mRegistered physical volume 'BEGe' (copy nr. 0) as kGermanium detector type (uid=1
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'Coax'['0'
+
+[34m[Detail --> [0mFound 'Coax[0]' matching the patter
+
+[34m[Detail --> [0mRegistered physical volume 'Coax' (copy nr. 0) as kGermanium detector type (uid=2
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'LAr'['0'
+
+[34m[Detail --> [0mFound 'LAr[0]' matching the patter
+
+[34m[Detail --> [0mRegistered physical volume 'LAr' (copy nr. 0) as kScintillator detector type (uid=3
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'BEGe'['0'
+
+[34m[Detail --> [0mFound 'BEGe[0]' matching the patter
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'Coax'['0'
+
+[34m[Detail --> [0mFound 'Coax[0]' matching the patter
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'LAr'['0'
+
+[34m[Detail --> [0mFound 'LAr[0]' matching the patter
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'BEGe'['0'
+
+[34m[Detail --> [0mFound 'BEGe[0]' matching the patter
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'Coax'['0'
+
+[34m[Detail --> [0mFound 'Coax[0]' matching the patter
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'LAr'['0'
+
+[34m[Detail --> [0mFound 'LAr[0]' matching the patter
+
+[34m[Detail --> [0mAdding electromagnetic physic
+
+[34m[Detail --> [0mUsing Livermore/LowEnergy electromagnetic physic
+
+[34m[Detail --> [0mAdding extra electromagnetic physic
+
+[34m[Detail --> [0mProcesses for optical photons are inactivate
+
+[34m[Detail --> [0mAdding radioactive decay physic
+
+[34m[Detail --> [0mEntries in ion table 12
+[34m[Detail --> [0mRegister cuts for G4Region 'SensitiveRegion
+
+[34m[Detail --> [0mCreate RMGVertexConfinment objec
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'BEGe'['0'
+
+[34m[Detail --> [0mFound 'BEGe[0]' matching the patter
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'Coax'['0'
+
+[34m[Detail --> [0mFound 'Coax[0]' matching the patter
+
+[33m[Warning -> [0mObject persistency disable
+
+[32m[Summary -> [0mStarting run nr. 0. Current local time is 01-09-2025 13:32:4
+
+[32m[Summary -> [0mNumber of events to be processed: 10000
+
+[34m[Detail --> [0mScanning for Physical volumes matching pattern 'Source'['.*'
+
+[34m[Detail --> [0mFound 'Source[0]' matching the patter
+
+[34m[Detail --> [0m · 'Source[0]', volume = 3.14159 mm
+
+[34m[Detail --> [0mWill sample points in the bulk of physical volumes
+[34m[Detail --> [0mSampling from 1 physical volumes, volume = 3.14159 mm
+
+[32m[Summary -> [0mProcessing event nr. 10000 (10%), at 0 days, 0 hours, 0 minutes and 2 second
+
+[32m[Summary -> [0mProcessing event nr. 20000 (20%), at 0 days, 0 hours, 0 minutes and 4 second
+
+[32m[Summary -> [0mProcessing event nr. 30000 (30%), at 0 days, 0 hours, 0 minutes and 7 second
+
+[32m[Summary -> [0mProcessing event nr. 40000 (40%), at 0 days, 0 hours, 0 minutes and 10 second
+
+[32m[Summary -> [0mProcessing event nr. 50000 (50%), at 0 days, 0 hours, 0 minutes and 12 second
+
+[32m[Summary -> [0mProcessing event nr. 60000 (60%), at 0 days, 0 hours, 0 minutes and 15 second
+
+[32m[Summary -> [0mProcessing event nr. 70000 (70%), at 0 days, 0 hours, 0 minutes and 18 second
+
+[32m[Summary -> [0mProcessing event nr. 80000 (80%), at 0 days, 0 hours, 0 minutes and 21 second
+
+[32m[Summary -> [0mProcessing event nr. 90000 (90%), at 0 days, 0 hours, 0 minutes and 23 second
+
+[32m[Summary -> [0mProcessing event nr. 100000 (100%), at 0 days, 0 hours, 0 minutes and 26 second
+
+[32m[Summary -> [0mRun nr. 0 completed. 100000 events simulated. Current local time is 01-09-2025 13:33:0
+
+[32m[Summary -> [0mStats: run time was 0 days, 0 hours, 0 minutes and 26 second
+
+[32m[Summary -> [0mStats: average event processing time was 0.00026691 seconds/event = 3746.6 events/secon
+
+[32m[Summary -> [0mStats: on average, 0.0 iterations were needed to sample a valid vertex (inf% efficiency
+
+[32m[Summary -> [0mStats: average time to sample a vertex was 0.35500 us/even
+
+ Changing export format to "jpg"

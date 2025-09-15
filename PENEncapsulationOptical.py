@@ -19,12 +19,6 @@ from pygeomtools import RemageDetectorInfo
 from numpy import pi
 
 
-
-
-
-
-
-
 # -----------------------------
 # Registry
 # -----------------------------

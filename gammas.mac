@@ -1,0 +1,45 @@
+# -----------------------------
+# Logging
+# -----------------------------
+/RMG/Manager/Logging/LogLevel detail  # options: debug, info, warning, error
+/RMG/Processes/OpticalPhysics true
+/RMG/Processes/SetLArScintillation true
+
+# -----------------------------
+# Register Detectors
+# -----------------------------
+
+/RMG/Geometry/RegisterDetector Germanium BEGe_pv 001
+/RMG/Geometry/RegisterDetector Germanium Coax_pv 002
+/RMG/Geometry/RegisterDetector Scintillator PEN_BEGe_wall_pv 003
+/RMG/Geometry/RegisterDetector Scintillator PEN_BEGe_bottom_pv 004
+/RMG/Geometry/RegisterDetector Scintillator PEN_Coax_wall_pv 005
+/RMG/Geometry/RegisterDetector Scintillator PEN_Coax_bottom_pv 006
+/RMG/Geometry/RegisterDetector Optical PMT_BEGe_pv 007
+/RMG/Geometry/RegisterDetector Optical PMT_Coax_pv 008
+/RMG/Geometry/RegisterDetector Scintillator LAr_pv 009
+
+
+# Optional: register LAr if you want it as an active volume
+
+
+# -----------------------------
+# Initialize Run
+# -----------------------------
+/run/initialize
+
+# -----------------------------
+# Source / Generator
+# -----------------------------
+/RMG/Generator/Confine Volume
+/RMG/Generator/Confinement/Physical/AddVolume Source
+
+/RMG/Generator/Select GPS
+/gps/particle gamma
+/gps/ang/type iso
+/gps/energy 2000 keV
+
+# -----------------------------
+# Start Simulation
+# -----------------------------
+/run/beamOn 100000

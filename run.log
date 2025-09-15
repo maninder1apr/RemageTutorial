@@ -1,0 +1,757 @@
+  _ __ ___ _ __ ___   __ _  __ _  ___ 
+ | '__/ _ \ '_ ` _ \ / _` |/ _` |/ _ \
+ | | |  __/ | | | | | (_| | (_| |  __/ v0.13.2.dev10+g2b8bff83b.d20250908
+ |_|  \___|_| |_| |_|\__,_|\__, |\___| using geant4-11-03-patch-02 [MT]
+                           |___/      
+
+[Summary -> CLHEP::HepRandom seed set to: 120929062
+[Summary -> Loading macro file: gammas.mac
+[Detail --> Reading HPGe_with_PEN_optical.gdml GDML file
+G4GDML: Reading 'HPGe_with_PEN_optical.gdml'...
+G4GDML: Reading definitions...
+G4GDML: Reading materials...
+G4GDML: Reading solids...
+G4GDML: Reading structure...
+G4GDML: Reading userinfo...
+G4GDML: Reading setup...
+G4GDML: Reading 'HPGe_with_PEN_optical.gdml' done!
+Stripping off GDML names of materials, solids and volumes ...
+[Summary -> Checking for overlaps in GDML geometry...
+[Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']
+[Detail --> Found 'BEGe_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'BEGe_pv' (copy nr. 0) as kGermanium detector type (uid=1)
+[Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']
+[Detail --> Found 'Coax_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'Coax_pv' (copy nr. 0) as kGermanium detector type (uid=2)
+[Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']
+[Detail --> Found 'LAr_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'LAr_pv' (copy nr. 0) as kScintillator detector type (uid=9)
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']
+[Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'PEN_BEGe_bottom_pv' (copy nr. 0) as kScintillator detector type (uid=4)
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']
+[Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'PEN_BEGe_wall_pv' (copy nr. 0) as kScintillator detector type (uid=3)
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']
+[Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'PEN_Coax_bottom_pv' (copy nr. 0) as kScintillator detector type (uid=6)
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']
+[Detail --> Found 'PEN_Coax_wall_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'PEN_Coax_wall_pv' (copy nr. 0) as kScintillator detector type (uid=5)
+[Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']
+[Detail --> Found 'PMT_BEGe_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'PMT_BEGe_pv' (copy nr. 0) as kOptical detector type (uid=7)
+[Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']
+[Detail --> Found 'PMT_Coax_pv[0]' matching the pattern
+[Detail --> Registered physical volume 'PMT_Coax_pv' (copy nr. 0) as kOptical detector type (uid=8)
+[Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']
+[Detail --> Found 'BEGe_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']
+[Detail --> Found 'Coax_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']
+[Detail --> Found 'LAr_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']
+[Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']
+[Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']
+[Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']
+[Detail --> Found 'PEN_Coax_wall_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']
+[Detail --> Found 'PMT_BEGe_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']
+[Detail --> Found 'PMT_Coax_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']
+[Detail --> Found 'BEGe_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']
+[Detail --> Found 'Coax_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']
+[Detail --> Found 'LAr_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']
+[Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']
+[Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']
+[Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']
+[Detail --> Found 'PEN_Coax_wall_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']
+[Detail --> Found 'PMT_BEGe_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']
+[Detail --> Found 'PMT_Coax_pv[0]' matching the pattern
+[Detail --> Adding electromagnetic physics
+[Detail --> Using Livermore/LowEnergy electromagnetic physics
+[Detail --> Adding extra electromagnetic physics
+[Detail --> Processes for optical photons are inactivated
+[Detail --> Adding radioactive decay physics
+[Detail --> Entries in ion table 12
+[Detail --> Register cuts for G4Region 'SensitiveRegion'
+
+=========================================================================
+--> G4TaskRunManager::CreateAndStartWorkers() --> Initializing workers...
+=========================================================================
+
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT3 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT0 > 
+G4WT0 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT0 > 
+G4WT3 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT3 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT1 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT3 > 
+G4WT0 > 
+G4WT0 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT0 > 
+G4WT3 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT1 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT3 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT2 > 
+G4WT1 > 
+G4WT2 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT2 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT1 > 
+G4WT1 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT1 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']G4WT0 > 
+G4WT3 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT2 > 
+G4WT3 > [Detail --> Found 'LAr_pv[0]' matching the patternG4WT3 > 
+G4WT0 > [Detail --> Found 'LAr_pv[0]' matching the patternG4WT0 > 
+G4WT2 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']G4WT3 > 
+G4WT2 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']G4WT1 > 
+G4WT3 > [Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the patternG4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'LAr_pv'['0']G4WT2 > 
+G4WT2 > [Detail --> Found 'LAr_pv[0]' matching the patternG4WT2 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']G4WT0 > 
+G4WT0 > [Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the patternG4WT0 > 
+G4WT1 > [Detail --> Found 'LAr_pv[0]' matching the patternG4WT1 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']G4WT3 > 
+G4WT2 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_bottom_pv'['0']G4WT2 > [Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the patternG4WT2 > 
+G4WT1 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']G4WT2 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']G4WT0 > 
+G4WT0 > [Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the patternG4WT0 > 
+G4WT2 > [Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the patternG4WT1 > [Detail --> Found 'PEN_BEGe_bottom_pv[0]' matching the patternG4WT1 > 
+G4WT2 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']G4WT3 > 
+G4WT3 > [Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the patternG4WT3 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']G4WT0 > 
+G4WT2 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_BEGe_wall_pv'['0']G4WT1 > 
+G4WT1 > [Detail --> Found 'PEN_BEGe_wall_pv[0]' matching the patternG4WT1 > 
+G4WT2 > [Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the patternG4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']G4WT3 > 
+G4WT2 > 
+G4WT0 > [Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the patternG4WT0 > 
+G4WT3 > [Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the patternG4WT3 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_bottom_pv'['0']G4WT1 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']G4WT2 > 
+G4WT1 > [Detail --> Found 'PEN_Coax_bottom_pv[0]' matching the patternG4WT0 > 
+G4WT2 > [Detail --> Found 'PEN_Coax_wall_pv[0]' matching the patternG4WT2 > 
+G4WT1 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']G4WT2 > 
+G4WT3 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'PEN_Coax_wall_pv'['0']G4WT1 > 
+G4WT2 > [Detail --> Found 'PMT_BEGe_pv[0]' matching the patternG4WT0 > [Detail --> Found 'PEN_Coax_wall_pv[0]' matching the patternG4WT0 > 
+G4WT2 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']G4WT3 > [Detail --> Found 'PEN_Coax_wall_pv[0]' matching the patternG4WT3 > 
+G4WT0 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']G4WT1 > [Detail --> Found 'PEN_Coax_wall_pv[0]' matching the patternG4WT1 > 
+G4WT0 > [Detail --> Found 'PMT_BEGe_pv[0]' matching the patternG4WT0 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']G4WT2 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']G4WT0 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_BEGe_pv'['0']G4WT1 > 
+G4WT3 > 
+G4WT0 > [Detail --> Found 'PMT_Coax_pv[0]' matching the patternG4WT0 > 
+G4WT1 > [Detail --> Found 'PMT_BEGe_pv[0]' matching the patternG4WT1 > 
+G4WT2 > [Detail --> Found 'PMT_Coax_pv[0]' matching the patternG4WT2 > 
+G4WT3 > [Detail --> Found 'PMT_BEGe_pv[0]' matching the patternG4WT3 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']G4WT3 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'PMT_Coax_pv'['0']G4WT1 > 
+G4WT3 > [Detail --> Found 'PMT_Coax_pv[0]' matching the patternG4WT3 > 
+G4WT1 > [Detail --> Found 'PMT_Coax_pv[0]' matching the patternG4WT1 > 
+G4WT0 > [Detail --> Adding electromagnetic physicsG4WT0 > 
+G4WT0 > [Detail --> Using Livermore/LowEnergy electromagnetic physicsG4WT0 > 
+G4WT2 > [Detail --> Adding electromagnetic physicsG4WT2 > 
+G4WT2 > [Detail --> Using Livermore/LowEnergy electromagnetic physicsG4WT0 > [Detail --> Adding extra electromagnetic physicsG4WT0 > 
+G4WT2 > 
+G4WT3 > [Detail --> Adding electromagnetic physicsG4WT3 > 
+G4WT2 > [Detail --> Adding extra electromagnetic physicsG4WT2 > 
+G4WT3 > [Detail --> Using Livermore/LowEnergy electromagnetic physicsG4WT3 > 
+G4WT1 > [Detail --> Adding electromagnetic physicsG4WT1 > 
+G4WT1 > [Detail --> Using Livermore/LowEnergy electromagnetic physicsG4WT1 > 
+G4WT3 > [Detail --> Adding extra electromagnetic physicsG4WT3 > 
+G4WT1 > [Detail --> Adding extra electromagnetic physicsG4WT1 > 
+G4WT3 > [Detail --> Processes for optical photons are inactivatedG4WT3 > 
+G4WT3 > [Detail --> Adding radioactive decay physicsG4WT3 > 
+G4WT0 > [Detail --> Processes for optical photons are inactivatedG4WT0 > 
+G4WT0 > [Detail --> Adding radioactive decay physicsG4WT0 > 
+G4WT2 > [Detail --> Processes for optical photons are inactivatedG4WT2 > 
+G4WT2 > [Detail --> Adding radioactive decay physicsG4WT2 > 
+G4WT1 > [Detail --> Processes for optical photons are inactivatedG4WT1 > 
+G4WT1 > [Detail --> Adding radioactive decay physicsG4WT1 > 
+G4WT3 > [Detail --> Entries in ion table 12
+G4WT0 > [Detail --> Entries in ion table 12
+G4WT1 > [Detail --> Entries in ion table 12
+G4WT2 > [Detail --> Entries in ion table 12
+[Detail --> Create RMGVertexConfinment object
+[Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']
+[Detail --> Found 'BEGe_pv[0]' matching the pattern
+[Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']
+[Detail --> Found 'Coax_pv[0]' matching the pattern
+[Summary -> Opening output file: .rmg-tmp-75746.output.hdf5 (for output.lh5)
+[Summary -> Starting run nr. 0. Current local time is 15-09-2025 15:06:32
+[Summary -> Number of events to be processed: 1000
+G4WT3 > [Detail --> Create RMGVertexConfinment objectG4WT0 > [Detail --> Create RMGVertexConfinment objectG4WT1 > [Detail --> Create RMGVertexConfinment objectG4WT1 > 
+G4WT2 > [Detail --> Create RMGVertexConfinment objectG4WT2 > 
+G4WT3 > 
+G4WT0 > 
+
+==========================================================================================
+--> G4TaskRunManager::CreateAndStartWorkers() --> Creating 32 tasks with 31 events/task...
+==========================================================================================
+
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT2 > 
+G4WT2 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT2 > 
+G4WT2 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT2 > 
+G4WT2 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT2 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT0 > 
+G4WT0 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT0 > 
+G4WT0 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT0 > 
+G4WT0 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT0 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT3 > 
+G4WT3 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT3 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'BEGe_pv'['0']G4WT1 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT3 > 
+G4WT1 > [Detail --> Found 'BEGe_pv[0]' matching the patternG4WT1 > 
+G4WT3 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT3 > 
+G4WT1 > [Detail --> Scanning for Physical volumes matching pattern 'Coax_pv'['0']G4WT1 > 
+G4WT1 > [Detail --> Found 'Coax_pv[0]' matching the patternG4WT1 > 
+G4WT3 > [Detail --> Scanning for Physical volumes matching pattern 'Source'['.*']G4WT3 > 
+G4WT3 > [Detail --> Found 'Source[0]' matching the patternG4WT3 > 
+G4WT3 > [Detail -->  · 'Source[0]', volume = 3.14159 mm3G4WT3 > 
+G4WT3 > [Detail --> Will sample points in the bulk of physical volumes
+G4WT3 > [Detail --> Sampling from 1 physical volumes, volume = 3.14159 mm3G4WT3 > 
+G4WT1 > [Summary -> Processing event nr. 100 (10%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT1 > 
+G4WT2 > [Summary -> Processing event nr. 200 (20%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT2 > 
+G4WT1 > [Summary -> Processing event nr. 300 (30%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT1 > 
+G4WT0 > [Summary -> Processing event nr. 400 (40%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT0 > 
+G4WT0 > [Summary -> Processing event nr. 500 (50%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT0 > 
+G4WT2 > [Summary -> Processing event nr. 600 (60%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT2 > 
+G4WT3 > [Summary -> Processing event nr. 700 (70%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT3 > 
+G4WT1 > [Summary -> Processing event nr. 800 (80%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT1 > 
+G4WT1 > [Summary -> Processing event nr. 900 (90%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT1 > 
+G4WT1 > [Summary -> Processing event nr. 1000 (100%), at 0 days, 0 hours, 0 minutes and 0 secondsG4WT1 > 
+G4WT2 > [Summary -> Stats: on average, 0.0 iterations were needed to sample a valid vertex (inf% efficiency)G4WT2 > 
+G4WT2 > [Summary -> Stats: average time to sample a vertex was 0.56200 us/eventG4WT1 > [Summary -> Stats: on average, 0.0 iterations were needed to sample a valid vertex (inf% efficiency)G4WT1 > 
+G4WT3 > [Summary -> Stats: on average, 0.0 iterations were needed to sample a valid vertex (inf% efficiency)G4WT3 > 
+G4WT3 > [Summary -> Stats: average time to sample a vertex was 0.82900 us/eventG4WT1 > [Summary -> Stats: average time to sample a vertex was 0.55700 us/eventG4WT1 > 
+G4WT0 > [Summary -> Stats: on average, 0.0 iterations were needed to sample a valid vertex (inf% efficiency)G4WT3 > 
+G4WT0 > 
+G4WT0 > [Summary -> Stats: average time to sample a vertex was 0.54500 us/eventG4WT0 > 
+G4WT2 > 
+G4WT1 > [Detail --> ConvertLH5: opened Geant4 HDF5 file .rmg-tmp-59918.output_t1.hdf5
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column dist_to_surf, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column edep, with units keV
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column evtid, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column particle, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column time, with units ns
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det001 - column zloc, with units m
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det001
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column dist_to_surf, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column edep, with units keV
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column evtid, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column particle, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column time, with units ns
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det002 - column zloc, with units m
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det002
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column edep, with units keV
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column evtid, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column particle, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column time, with units ns
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det003 - column zloc, with units m
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det003
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column edep, with units keV
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column edep - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column evtid, with units 
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column evtid - no data, creating with type int
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column particle, with units 
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column particle - no data, creating with type int
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column time, with units ns
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column time - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column xloc, with units m
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column xloc - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column yloc, with units m
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column yloc - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det004 - column zloc, with units m
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det004 - column zloc - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det004
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column edep, with units keV
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column evtid, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column particle, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column time, with units ns
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det005 - column zloc, with units m
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det005
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column edep, with units keV
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column edep - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column evtid, with units 
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column evtid - no data, creating with type int
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column particle, with units 
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column particle - no data, creating with type int
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column time, with units ns
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column time - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column xloc, with units m
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column xloc - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column yloc, with units m
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column yloc - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det006 - column zloc, with units m
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det006 - column zloc - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det006
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det007 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det007 - column evtid, with units 
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det007 - column evtid - no data, creating with type int
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det007 - column time, with units ns
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det007 - column time - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det007 - column wavelength, with units nm
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det007 - column wavelength - no data, creating with type float
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det007
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det008 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det008 - column evtid, with units 
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det008 - column evtid - no data, creating with type int
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det008 - column time, with units ns
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det008 - column time - no data, creating with type double
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det008 - column wavelength, with units nm
+G4WT1 > [Warning -> ConvertLH5: ntuple /stp/det008 - column wavelength - no data, creating with type float
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det008
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column edep, with units keV
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column evtid, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column particle, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column time, with units ns
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/det009 - column zloc, with units m
+G4WT1 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det009
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column name, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column zloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - visiting
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - column evtid, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - column n_part, with units 
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - column time, with units ns
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - column xloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - column yloc, with units m
+G4WT1 > [Detail --> ConvertLH5: ntuple /stp/vtx - column zloc, with units m
+G4WT1 > [Summary -> ConvertLH5: Done updating HDF5 file .rmg-tmp-59918.output_t1.hdf5 to LH5
+G4WT1 > [Summary -> Moved output file .rmg-tmp-59918.output_t1.hdf5 to output_t1.lh5
+G4WT2 > [Detail --> ConvertLH5: opened Geant4 HDF5 file .rmg-tmp-47906.output_t2.hdf5
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column dist_to_surf, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column edep, with units keV
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column evtid, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column particle, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column time, with units ns
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det001 - column zloc, with units m
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det001
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column dist_to_surf, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column edep, with units keV
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column evtid, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column particle, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column time, with units ns
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det002 - column zloc, with units m
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det002
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column edep, with units keV
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column edep - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column evtid, with units 
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column evtid - no data, creating with type int
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column particle, with units 
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column particle - no data, creating with type int
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column time, with units ns
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column time - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column xloc, with units m
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column xloc - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column yloc, with units m
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column yloc - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det003 - column zloc, with units m
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det003 - column zloc - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det003
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column edep, with units keV
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column evtid, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column particle, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column time, with units ns
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det004 - column zloc, with units m
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det004
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column edep, with units keV
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column evtid, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column particle, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column time, with units ns
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det005 - column zloc, with units m
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det005
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column edep, with units keV
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column edep - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column evtid, with units 
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column evtid - no data, creating with type int
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column particle, with units 
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column particle - no data, creating with type int
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column time, with units ns
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column time - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column xloc, with units m
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column xloc - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column yloc, with units m
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column yloc - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det006 - column zloc, with units m
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det006 - column zloc - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det006
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det007 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det007 - column evtid, with units 
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det007 - column evtid - no data, creating with type int
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det007 - column time, with units ns
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det007 - column time - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det007 - column wavelength, with units nm
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det007 - column wavelength - no data, creating with type float
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det007
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det008 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det008 - column evtid, with units 
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det008 - column evtid - no data, creating with type int
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det008 - column time, with units ns
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det008 - column time - no data, creating with type double
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det008 - column wavelength, with units nm
+G4WT2 > [Warning -> ConvertLH5: ntuple /stp/det008 - column wavelength - no data, creating with type float
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det008
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column edep, with units keV
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column evtid, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column particle, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column time, with units ns
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/det009 - column zloc, with units m
+G4WT2 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det009
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column name, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column zloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - visiting
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - column evtid, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - column n_part, with units 
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - column time, with units ns
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - column xloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - column yloc, with units m
+G4WT2 > [Detail --> ConvertLH5: ntuple /stp/vtx - column zloc, with units m
+G4WT2 > [Summary -> ConvertLH5: Done updating HDF5 file .rmg-tmp-47906.output_t2.hdf5 to LH5
+G4WT2 > [Summary -> Moved output file .rmg-tmp-47906.output_t2.hdf5 to output_t2.lh5
+G4WT0 > [Detail --> ConvertLH5: opened Geant4 HDF5 file .rmg-tmp-84739.output_t0.hdf5
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column dist_to_surf, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column edep, with units keV
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column evtid, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column particle, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column time, with units ns
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det001 - column zloc, with units m
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det001
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column dist_to_surf, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column edep, with units keV
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column evtid, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column particle, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column time, with units ns
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det002 - column zloc, with units m
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det002
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column edep, with units keV
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column evtid, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column particle, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column time, with units ns
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det003 - column zloc, with units m
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det003
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column edep, with units keV
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column edep - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column evtid, with units 
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column evtid - no data, creating with type int
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column particle, with units 
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column particle - no data, creating with type int
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column time, with units ns
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column time - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column xloc, with units m
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column xloc - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column yloc, with units m
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column yloc - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det004 - column zloc, with units m
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det004 - column zloc - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det004
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column edep, with units keV
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column evtid, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column particle, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column time, with units ns
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det005 - column zloc, with units m
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det005
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column edep, with units keV
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column edep - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column evtid, with units 
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column evtid - no data, creating with type int
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column particle, with units 
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column particle - no data, creating with type int
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column time, with units ns
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column time - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column xloc, with units m
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column xloc - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column yloc, with units m
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column yloc - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det006 - column zloc, with units m
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det006 - column zloc - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det006
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det007 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det007 - column evtid, with units 
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det007 - column evtid - no data, creating with type int
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det007 - column time, with units ns
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det007 - column time - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det007 - column wavelength, with units nm
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det007 - column wavelength - no data, creating with type float
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det007
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det008 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det008 - column evtid, with units 
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det008 - column evtid - no data, creating with type int
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det008 - column time, with units ns
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det008 - column time - no data, creating with type double
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det008 - column wavelength, with units nm
+G4WT0 > [Warning -> ConvertLH5: ntuple /stp/det008 - column wavelength - no data, creating with type float
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det008
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column edep, with units keV
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column evtid, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column particle, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column time, with units ns
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/det009 - column zloc, with units m
+G4WT0 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det009
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column name, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column zloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - visiting
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - column evtid, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - column n_part, with units 
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - column time, with units ns
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - column xloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - column yloc, with units m
+G4WT0 > [Detail --> ConvertLH5: ntuple /stp/vtx - column zloc, with units m
+G4WT0 > [Summary -> ConvertLH5: Done updating HDF5 file .rmg-tmp-84739.output_t0.hdf5 to LH5
+G4WT0 > [Summary -> Moved output file .rmg-tmp-84739.output_t0.hdf5 to output_t0.lh5
+G4WT3 > [Detail --> ConvertLH5: opened Geant4 HDF5 file .rmg-tmp-71900.output_t3.hdf5
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column dist_to_surf, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column edep, with units keV
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column evtid, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column particle, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column time, with units ns
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det001 - column zloc, with units m
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det001
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column dist_to_surf, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column edep, with units keV
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column evtid, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column particle, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column time, with units ns
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det002 - column zloc, with units m
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det002
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column edep, with units keV
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column edep - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column evtid, with units 
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column evtid - no data, creating with type int
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column particle, with units 
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column particle - no data, creating with type int
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column time, with units ns
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column time - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column xloc, with units m
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column xloc - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column yloc, with units m
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column yloc - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det003 - column zloc, with units m
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det003 - column zloc - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det003
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column edep, with units keV
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column evtid, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column particle, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column time, with units ns
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det004 - column zloc, with units m
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det004
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column edep, with units keV
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column evtid, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column particle, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column time, with units ns
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det005 - column zloc, with units m
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det005
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column edep, with units keV
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column edep - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column evtid, with units 
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column evtid - no data, creating with type int
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column particle, with units 
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column particle - no data, creating with type int
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column time, with units ns
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column time - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column xloc, with units m
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column xloc - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column yloc, with units m
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column yloc - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det006 - column zloc, with units m
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det006 - column zloc - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det006
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det007 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det007 - column evtid, with units 
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det007 - column evtid - no data, creating with type int
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det007 - column time, with units ns
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det007 - column time - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det007 - column wavelength, with units nm
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det007 - column wavelength - no data, creating with type float
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det007
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det008 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det008 - column evtid, with units 
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det008 - column evtid - no data, creating with type int
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det008 - column time, with units ns
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det008 - column time - no data, creating with type double
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det008 - column wavelength, with units nm
+G4WT3 > [Warning -> ConvertLH5: ntuple /stp/det008 - column wavelength - no data, creating with type float
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det008
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column edep, with units keV
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column evtid, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column particle, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column time, with units ns
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/det009 - column zloc, with units m
+G4WT3 > [Detail --> ConvertLH5: created soft link stp/__by_uid__/det009
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column name, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/detector_origins - column zloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - visiting
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - column evtid, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - column n_part, with units 
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - column time, with units ns
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - column xloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - column yloc, with units m
+G4WT3 > [Detail --> ConvertLH5: ntuple /stp/vtx - column zloc, with units m
+G4WT3 > [Summary -> ConvertLH5: Done updating HDF5 file .rmg-tmp-71900.output_t3.hdf5 to LH5
+G4WT3 > [Summary -> Moved output file .rmg-tmp-71900.output_t3.hdf5 to output_t3.lh5
+[Summary -> Run nr. 0 completed. 1000 events simulated. Current local time is 15-09-2025 15:06:33
+[Summary -> Stats: run time was 0 days, 0 hours, 0 minutes and 0 seconds
+[Summary -> Stats: average event processing time was 0.00020385 seconds/event = 4905.6 events/second
+[Summary -> Stats: on average, 0.0 iterations were needed to sample a valid vertex (inf% efficiency)
+[Summary -> Stats: average time to sample a vertex was 0.00000 us/event
+Traceback (most recent call last):
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/bin/remage", line 10, in <module>
+    sys.exit(remage_cli())
+             ~~~~~~~~~~^^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/remage/cli.py", line 310, in remage_cli
+    return remage_run_from_args(raise_on_error=False)[0]
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/remage/cli.py", line 299, in remage_run_from_args
+    post_proc(
+    ~~~~~~~~~^
+        ipc_info,
+        ^^^^^^^^^
+    ...<2 lines>...
+        py_args.time_window_in_us,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/remage/post_proc.py", line 102, in post_proc
+    reboost.build_hit(
+    ~~~~~~~~~~~~~~~~~^
+        config,
+        ^^^^^^^
+    ...<5 lines>...
+        overwrite=overwrite_output,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/reboost/build_hit.py", line 376, in build_hit
+    utils.write_lh5(
+    ~~~~~~~~~~~~~~~^
+        hit_table,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        wo_mode=wo_mode,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/reboost/utils.py", line 427, in write_lh5
+    lh5.write(
+    ~~~~~~~~~^
+        Struct({out_detector: hit_table}),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        wo_mode=wo_mode,
+        ^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/lgdo/lh5/core.py", line 315, in write
+    return _serializers._h5_write_lgdo(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        obj,
+        ^^^^
+    ...<7 lines>...
+        **h5py_kwargs,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/lgdo/lh5/_serializers/write/composite.py", line 147, in _h5_write_lgdo
+    return _h5_write_struct(
+        obj,
+    ...<7 lines>...
+        **h5py_kwargs,
+    )
+  File "/Users/maninder/Desktop/Programs/remage/build/python_venv/lib/python3.13/site-packages/lgdo/lh5/_serializers/write/composite.py", line 291, in _h5_write_struct
+    raise LH5EncodeError(msg, lh5_file, group, name)
+lgdo.lh5.exceptions.LH5EncodeError: while encoding object /stp to file output.lh5: Can't append ['det003'] column(s) to a table with the same field(s)
