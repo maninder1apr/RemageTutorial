@@ -265,10 +265,10 @@ def create_pmt_under_pen(det_pos, pen_half_height, name_prefix, det_id, gap=0.1)
     # Detector center (in cm)
     det_x, det_y, det_z = float(det_pos[0]), float(det_pos[1]), float(det_pos[2])
 
-    # PEN bottom z (you already had this correct!)
+   
     pen_bottom_z = pen_half_height
 
-    # PMT center = PEN bottom - gap - half_thickness
+    
     pmt_center_z = pen_bottom_z - gap - half_thickness
 
     # Solid: pass half-extents
