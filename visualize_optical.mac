@@ -1,0 +1,79 @@
+# ===============================
+# Macro: visualize_optical.mac
+# ===============================
+
+##########################################################
+# Fiber → SiPM Optical Simulation
+# Full RMG macro
+##########################################################
+
+# -----------------------------
+# Visualization setup
+# -----------------------------
+
+# -----------------------------
+# Register optical detectors
+# -----------------------------
+/RMG/Geometry/RegisterDetector Optical optdet1 101
+
+# -----------------------------
+# Enable optical physics
+# -----------------------------
+/RMG/Processes/OpticalPhysics true
+/RMG/Processes/OpticalPhysicsMaxOneWLSPhoton true
+
+
+# ----- General Settings -----
+/run/initialize
+/run/verbose 1
+#/tracking/verbose 1
+/event/verbose 0
+/random/setSeeds 123456 654321
+
+# ----- Visualization -----
+/vis/open OGL 
+# Geometry style
+/vis/viewer/set/style wireframe
+/vis/viewer/set/auxiliaryEdge true
+/vis/viewer/set/lineSegmentsPerCircle 100
+
+# Draw the volume
+/vis/drawVolume
+
+# Background and default color
+/vis/viewer/set/background white
+/vis/viewer/set/defaultColour 0.5 0.5 0.5  # grey for everything
+
+# Add coordinate axes
+/vis/scene/add/axes 0 0 0 100 mm
+
+# Camera viewpoint and zoom
+/vis/viewer/set/viewpointThetaPhi 90 0
+/vis/viewer/zoom 1.2
+
+######################################################
+# Event visualization
+######################################################
+/vis/scene/add/trajectories smooth
+/vis/scene/add/hits
+/vis/scene/endOfEventAction accumulate
+
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+
+
+
+# ----- Photon Source -----
+/RMG/Generator/Select GPS
+/gps/particle opticalphoton
+/gps/particle opticalphoton
+/gps/ang/type beam1d
+/gps/energy 2.6 eV                 # typical optical photon energy
+/gps/direction 0 0 1             # along +Z axis (toward SiPM)
+/gps/position 0 1 -51 cm          # start in front of fibers
+/gps/polarization 1 0 0
+/gps/ang/type iso
+
+# ----- Run Settings -----
+/run/beamOn 10                  # number of events

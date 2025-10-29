@@ -3,7 +3,7 @@
 # -----------------------------
 /RMG/Manager/Logging/LogLevel detail  # options: debug, info, warning, error
 /RMG/Processes/OpticalPhysics true
-/RMG/Processes/SetLArScintillation true
+/tracking/verbose 1
 
 # -----------------------------
 # Register Detectors
@@ -42,4 +42,4 @@
 # -----------------------------
 # Start Simulation
 # -----------------------------
-/run/beamOn 100000
+/run/beamOn 1000

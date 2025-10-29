@@ -1,0 +1,49 @@
+##########################################################
+# Fiber → SiPM Optical Simulation
+# Full RMG macro
+##########################################################
+
+# -----------------------------
+# Visualization setup
+# -----------------------------
+
+# -----------------------------
+# Register optical detectors
+# -----------------------------
+/RMG/Geometry/RegisterDetector Optical optdet1 101
+/RMG/Geometry/RegisterDetector Optical optdet2 102
+# -----------------------------
+# Enable optical physics
+# -----------------------------
+/RMG/Processes/OpticalPhysics true
+/RMG/Processes/OpticalPhysicsMaxOneWLSPhoton true
+
+# -----------------------------
+# Initialize geometry
+# -----------------------------
+/run/initialize
+#/tracking/verbose 1
+# -----------------------------
+# GPS Optical Photon Source
+# -----------------------------
+/RMG/Generator/Select GPS
+/gps/particle opticalphoton
+/gps/ang/type beam1d
+/gps/energy 2.6 eV                 # typical optical photon energy
+/gps/direction 0 0 1
+/gps/position 0 0 -578.95 mm
+/gps/polarization 1 0 0
+/gps/ang/type iso
+
+# -----------------------------
+# Start simulation
+# -----------------------------
+/run/beamOn 10000
+
+# -----------------------------
+# Optional: Save visualization
+# -----------------------------
+#/vis/scene/exportVRML fiber_scene.wrl
+
+# Force perpendicular emission direction
+/gps/direction 1 0 0

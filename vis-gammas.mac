@@ -11,6 +11,7 @@
 #/RMG/Geometry/RegisterDetector Scintillator LAr 003
 /RMG/Geometry/RegisterDetector Scintillator PEN_Coax 003
 /RMG/Geometry/RegisterDetector Scintillator PEN_BEGe 004
+/RMG/Geometry/RegisterDetector Scintillator PEN_stl 005
 
 /run/initialize
 
