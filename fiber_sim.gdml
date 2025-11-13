@@ -127,11 +127,11 @@
 			<solidref ref="lar"/>
 			<physvol name="optdet1">
 				<volumeref ref="optdet1"/>
-				<position name="optdet1_pos" x="0.000000000000000" y="0.000000000000000" z="1001.000000000000000" unit="mm"/>
+				<position name="optdet1_pos" x="0.000000000000000" y="0.000000000000000" z="1002.000000000000000" unit="mm"/>
 			</physvol>
 			<physvol name="optdet2">
 				<volumeref ref="optdet2"/>
-				<position name="optdet2_pos" x="0.000000000000000" y="0.000000000000000" z="-1001.000000000000000" unit="mm"/>
+				<position name="optdet2_pos" x="0.000000000000000" y="0.000000000000000" z="-1002.000000000000000" unit="mm"/>
 			</physvol>
 			<physvol name="fiber_phys_0">
 				<volumeref ref="fiber_outer_log_0"/>

@@ -429,7 +429,7 @@ optdet2 = g4.LogicalVolume(optdet, g4.MaterialPredefined("G4_Si"), "optdet2", re
 # Place SiPM at fiber end along z
 pv_optdet1 = g4.PhysicalVolume(
     [0, 0, 0],   # fiber length / 2 in mm
-    [0, 0, 1001, "mm"],     # no rotation
+    [0, 0, 1002, "mm"],     # no rotation
     optdet1,
     "optdet1",
     lar_log,
@@ -439,7 +439,7 @@ pv_optdet1 = g4.PhysicalVolume(
 
 pv_optdet2 = g4.PhysicalVolume(
     [0, 0, 0],   # fiber length / 2 in mm
-    [0, 0, -1001, "mm"],     # no rotation
+    [0, 0, -1002, "mm"],     # no rotation
     optdet2,
     "optdet2",
     lar_log,

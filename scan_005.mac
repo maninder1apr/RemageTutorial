@@ -33,7 +33,7 @@
 /gps/direction 0 0 1
 /gps/position 0 0 -473.68 mm
 /gps/polarization 1 0 0
-/gps/ang/type iso
+#/gps/ang/type iso
 
 # -----------------------------
 # Start simulation

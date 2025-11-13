@@ -28,12 +28,13 @@
 # -----------------------------
 /RMG/Generator/Select GPS
 /gps/particle opticalphoton
+/RMG/Optical/UseOpticalMap true
 /gps/ang/type beam1d
 /gps/energy 2.6 eV                 # typical optical photon energy
-#/gps/direction 0 0 1             # along +Z axis (toward SiPM)
+/gps/direction 0 0 1             # along +Z axis (toward SiPM)
 /gps/position 0 0 -51 cm          # start in front of fibers
 /gps/polarization 1 0 0
-/gps/ang/type iso
+#/gps/ang/type iso
 
 # -----------------------------
 # Start simulation
