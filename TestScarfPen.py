@@ -213,6 +213,11 @@ lar_s = solid.Tubs("LAr_s", 0.0, lar_radius_mm, lar_half_height_mm, 0.0, 2.0 * m
 lar_lv = g4.LogicalVolume(lar_s, mats.liquidargon, "LAr_lv", registry=reg, lunit="mm")
 lar_pv = g4.PhysicalVolume([0, 0, 0], [0, 0, 0, "mm"], lar_lv, "LAr_pv", world_lv, registry=reg)
 
+
+#source_s = solid.Tubs("Source_s", 0, 1, 1, 0, 2*pi, registry=reg, lunit="cm")
+#source_l = g4.LogicalVolume(source_s, "G4_BRAIN_ICRP", "Source_L", registry=reg)
+#g4.PhysicalVolume([0, 0, 0], [0, 0, +3.0, "cm"], source_l, "Source", lar_lv, registry=reg)
+
 # -----------------------------
 # HPGe detectors (same meta as before)
 # -----------------------------
@@ -220,7 +225,7 @@ icpc_meta = {
     "name": "V99000A",
     "type": "icpc",
     "production": {
-        "enrichment": {"val": 0.874, "unc": 0.003},
+        "enrichment": {"val": 0.076, "unc": 0.003},
         "mass_in_g": 1500.0
     },
     "geometry": {
@@ -242,7 +247,7 @@ icpc_meta = {
 bege_meta = {
     "name": "B00000B",
     "type": "bege",
-    "production": {"enrichment": {"val": 0.874, "unc": 0.003}, "mass_in_g": 697.0},
+    "production": {"enrichment": {"val": 0.076, "unc": 0.003}, "mass_in_g": 697.0},
     "geometry": {
         "height_in_mm": 32.00,
         "radius_in_mm": 37.00,
@@ -282,8 +287,8 @@ bege_pv = g4.PhysicalVolume([0, 0, 0], [0, 0, bege_placement_mm, "mm"], bege_lv,
 icpc_pv = g4.PhysicalVolume([0, 0, 0], [0, 0, icpc_placement_mm, "mm"], icpc_lv, "ICPC_pv", lar_lv, registry=reg)
 
 # mark them as active detectors (RemageDetectorInfo expects mm metadata)
-bege_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 1, bege_meta)
-icpc_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 2, icpc_meta)
+bege_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 101, bege_meta)
+icpc_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 102, icpc_meta)
 
 # -----------------------------
 # Closed PEN enclosures around each detector
@@ -329,7 +334,7 @@ def make_closed_cylinder_mm(name, inner_r_mm, outer_r_mm, height_mm, thickness_m
         f"{name}_union_top",
         wall,
         cap,
-        tra2=([0.0, 0.0, 0.0], [0.0, 0.0, half_h, "mm"]),
+        tra2=([0.0, 0.0, 0.0], [0.0, 0.0, half_h/2, "mm"]),
         registry=reg
     )
 
@@ -338,7 +343,7 @@ def make_closed_cylinder_mm(name, inner_r_mm, outer_r_mm, height_mm, thickness_m
         f"{name}_union_full",
         enclosure_top,
         cap,
-        tra2=([0.0, 0.0, 0.0], [0.0, 0.0, -half_h, "mm"]),
+        tra2=([0.0, 0.0, 0.0], [0.0, 0.0, -half_h/2, "mm"]),
         registry=reg
     )
 
@@ -349,7 +354,7 @@ enclosure_bege_solid = make_closed_cylinder_mm(
     "enclosure_bege",
     inner_r_mm=37.5,     # mm
     outer_r_mm=39.0,     # mm
-    height_mm=34.0,      # mm total height
+    height_mm=69.0,      # mm total height
     thickness_mm=1.5,    # mm cap thickness
     reg=reg,
     plate_extra_r_mm=5.0
@@ -359,7 +364,7 @@ enclosure_icpc_solid = make_closed_cylinder_mm(
     "enclosure_icpc",
     inner_r_mm=39.5,
     outer_r_mm=41.0,
-    height_mm=67.0,
+    height_mm=134.0,
     thickness_mm=1.5,
     reg=reg,
     plate_extra_r_mm=5.0
@@ -367,6 +372,23 @@ enclosure_icpc_solid = make_closed_cylinder_mm(
 
 enclosure_bege_lv = g4.LogicalVolume(enclosure_bege_solid, mats.pen, "enclosure_bege_lv", registry=reg)
 enclosure_icpc_lv = g4.LogicalVolume(enclosure_icpc_solid, mats.pen, "enclosure_icpc_lv", registry=reg)
+
+# -----------------------------
+# PEN rough optical surface
+# -----------------------------
+pen_surface = g4.solid.OpticalSurface(
+    name="PEN_surface",
+    model="unified",
+    finish="ground",                # makes the surface rough
+    surf_type="dielectric_dielectric",  # PEN ↔ LAr
+    value=0.1,                      # roughness sigma_alpha in radians
+    registry=reg
+)
+
+# attach the PEN surface to the PEN enclosures
+for lv in [enclosure_bege_lv, enclosure_icpc_lv]:
+    g4.SkinSurface(f"{lv.name}_os", lv, pen_surface, reg)
+
 
 # -----------------------------
 # Place the PEN enclosures (stacked as in your script)
@@ -384,105 +406,252 @@ enclosure_icpc_pv = g4.PhysicalVolume(
     "enclosure_icpc_pv", lar_lv, registry=reg
 )
 
-# -----------------------------
-# Fiber-optic hollow shroud (concentric, around PEN)
-# -----------------------------
-def make_fiberoptic_shroud_mm(
-    name: str,
-    inner_radius_mm: float,
-    fiber_half_len_mm: float,
+
+
+'''
+
+def make_fully_nested_fiberoptic_shroud(
+    name="fiber_shroud",
+    core_radius_mm=1.0,
+    cl1_thickness_mm=0.2,
+    cl2_thickness_mm=0.3,
+    tpb_thickness_mm=0.1,
+    half_length_mm=50.0,
+    parent_lv=None,
+    registry=None
+):
+    
+
+    # -----------------------------
+    # Define radii and lengths
+    # -----------------------------
+    fiber_core_radius = core_radius_mm
+    fiber_half_len = half_length_mm
+
+    fiber_cl1_outer_radius = fiber_core_radius + cl1_thickness_mm
+    fiber_cl2_outer_radius = fiber_cl1_outer_radius + cl2_thickness_mm
+    fiber_outer_r = fiber_cl2_outer_radius + tpb_thickness_mm
+
+    # -----------------------------
+    # Core
+    # -----------------------------
+    core_solid = g4.Tubs(f"{name}_core_solid", 0, fiber_core_radius, fiber_half_len, 0, 360)
+    fiber_core_lv = g4.LogicalVolume(core_solid, "Scintillator", f"{name}_core_lv")
+    fiber_core_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_core_lv, f"{name}_core_pv", None, registry)
+
+    # -----------------------------
+    # Cladding 1
+    # -----------------------------
+    cl1_solid = g4.Tubs(f"{name}_cl1_solid", 0, fiber_cl1_outer_radius, fiber_half_len, 0, 360)
+    cl1_lv = g4.LogicalVolume(cl1_solid, "PMMA", f"{name}_cl1_lv")
+    cl1_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_core_lv, f"{name}_cl1_pv", fiber_core_lv, registry)
+
+    # -----------------------------
+    # Cladding 2
+    # -----------------------------
+    cl2_solid = g4.Tubs(f"{name}_cl2_solid", 0, fiber_cl2_outer_radius, fiber_half_len, 0, 360)
+    cl2_lv = g4.LogicalVolume(cl2_solid, "FluoroPolymer", f"{name}_cl2_lv")
+    cl2_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl2_lv, f"{name}_cl2_pv", cl1_lv, registry)
+
+    # -----------------------------
+    # TPB coating (outermost)
+    # -----------------------------
+    tpb_solid = g4.Tubs(f"{name}_tpb_solid", 0, fiber_outer_r, fiber_half_len, 0, 360)
+    fiber_lv = g4.LogicalVolume(tpb_solid, "TPB", f"{name}_tpb_lv")
+    tpb_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_lv, f"{name}_tpb_pv", parent_lv, registry)
+
+    # -----------------------------
+    # Nest daughters properly
+    # -----------------------------
+    # Core inside cl1
+    g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_core_lv, f"{name}_core_pv", cl1_lv, registry)
+    # Cl1 inside cl2
+    g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl1_lv, f"{name}_cl1_pv", cl2_lv, registry)
+    # Cl2 inside TPB
+    g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl2_lv, f"{name}_cl2_pv", fiber_lv, registry)
+
+    # -----------------------------
+    # Return in the order your code expects
+    # -----------------------------
+    return fiber_lv, fiber_core_lv, fiber_core_pv, fiber_outer_r, fiber_half_len
+'''
+
+def make_fiberoptic_shroud(
     registry,
-    mats,
-    core_thickness_mm: float = 1.0,
-    cl1_thickness_mm: float = 0.2,
-    cl2_thickness_mm: float = 0.4,
-    tpb_thickness_mm: float = 0.001,
-    parent_lv=None
+    lar_lv,
+    length,
+    r_inner_most,
+    t_core,
+    t_clad1,
+    t_clad2,
+    t_tpb,
+    material_core,
+    material_clad1,
+    material_clad2,
+    material_tpb,
+    base_name="fiber"
 ):
     """
-    Build concentric fiber-optic shroud with hierarchical placement to avoid overlaps.
-    Returns: (outermost_lv, core_lv, core_pv, outer_radius_mm, half_length_mm)
+    Build a fiber optic shroud with layers:
+    TPB (innermost) -> Cladding2 inner -> Cladding1 inner -> Core 
+    -> Cladding1 outer -> Cladding2 outer (outermost) -> LAr
+    All radii are contiguous. Optical surfaces are added between layers.
     """
-    import math
 
-    if parent_lv is None:
-        raise ValueError("parent_lv must be provided (e.g. lar_lv) for placement.")
+    # -------------------------
+    # Radii (contiguous)
+    # -------------------------
+    r_tpb_in    = r_inner_most                       # 60 mm
+    r_tpb_out   = r_tpb_in + t_tpb                   # 60 + 0.001
 
-    eps = 0.1  # clearance in mm to avoid overlaps
+    r_cl2_in    = r_tpb_out                          # 60.001
+    r_cl2_out   = r_cl2_in + t_clad2                 # 60.001 + 0.4 = 60.401
 
-    # Radii for layers (hierarchical)
-    r0 = inner_radius_mm
-    r_tpb_out = r0 + tpb_thickness_mm
-    r_cl2_in = r_tpb_out + eps
-    r_cl2_out = r_cl2_in + cl2_thickness_mm
-    r_cl1_in = r_cl2_out + eps
-    r_cl1_out = r_cl1_in + cl1_thickness_mm
-    r_core_in = r_cl1_out + eps
-    r_core_out = r_core_in + core_thickness_mm
-    r_cl1_outer_out = r_core_out + eps + cl1_thickness_mm
-    r_cl2_outer_out = r_cl1_outer_out + eps + cl2_thickness_mm
+    r_cl1_in    = r_cl2_out                           # 60.401
+    r_cl1_out   = r_cl1_in + t_clad1                  # 60.401 + 0.2 = 60.601
 
-    # Create solids
-    tpb_s = solid.Tubs(f"{name}_tpb_s", r0, r_tpb_out, fiber_half_len_mm, 0, 2*math.pi, registry=registry)
-    cl2_inner_s = solid.Tubs(f"{name}_cl2_inner_s", r_cl2_in, r_cl2_out, fiber_half_len_mm, 0, 2*math.pi, registry=registry)
-    cl1_inner_s = solid.Tubs(f"{name}_cl1_inner_s", r_cl1_in, r_cl1_out, fiber_half_len_mm, 0, 2*math.pi, registry=registry)
-    core_s = solid.Tubs(f"{name}_core_s", r_core_in, r_core_out, fiber_half_len_mm, 0, 2*math.pi, registry=registry)
-    cl1_outer_s = solid.Tubs(f"{name}_cl1_outer_s", r_core_out + eps, r_cl1_outer_out, fiber_half_len_mm, 0, 2*math.pi, registry=registry)
-    cl2_outer_s = solid.Tubs(f"{name}_cl2_outer_s", r_cl1_outer_out + eps, r_cl2_outer_out, fiber_half_len_mm, 0, 2*math.pi, registry=registry)
+    r_core_in   = r_cl1_out                           # 60.601
+    r_core_out  = r_core_in + t_core                  # 60.601 + t_core
 
-    # Create logical volumes
-    tpb_lv = g4.LogicalVolume(tpb_s, mats.tpb_on_fibers, f"{name}_tpb_lv", registry=registry)
-    cl2_inner_lv = g4.LogicalVolume(cl2_inner_s, mats.pmma_out, f"{name}_cl2_inner_lv", registry=registry)
-    cl1_inner_lv = g4.LogicalVolume(cl1_inner_s, mats.pmma, f"{name}_cl1_inner_lv", registry=registry)
-    core_lv = g4.LogicalVolume(core_s, mats.ps_fibers, f"{name}_core_lv", registry=registry)
-    cl1_outer_lv = g4.LogicalVolume(cl1_outer_s, mats.pmma, f"{name}_cl1_outer_lv", registry=registry)
-    cl2_outer_lv = g4.LogicalVolume(cl2_outer_s, mats.pmma_out, f"{name}_cl2_outer_lv", registry=registry)
+    r_cl1_out_in  = r_core_out                       # outer Cladding1 inner radius
+    r_cl1_out_out = r_cl1_out_in + t_clad1           # +0.2
 
-    # Hierarchical placement (avoid overlaps)
-    tpb_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], tpb_lv, f"{name}_tpb_pv", parent_lv, registry=registry)
-    cl2_inner_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl2_inner_lv, f"{name}_cl2_inner_pv", tpb_lv, registry=registry)
-    cl1_inner_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl1_inner_lv, f"{name}_cl1_inner_pv", cl2_inner_lv, registry=registry)
-    core_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], core_lv, f"{name}_core_pv", cl1_inner_lv, registry=registry)
-    cl1_outer_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl1_outer_lv, f"{name}_cl1_outer_pv", core_lv, registry=registry)
-    cl2_outer_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl2_outer_lv, f"{name}_cl2_outer_pv", cl1_outer_lv, registry=registry)
+    r_cl2_out_in  = r_cl1_out_out                     # outer Cladding2 inner radius
+    r_cl2_out_out = r_cl2_out_in + t_clad2           # +0.4
 
-    # Attach optical surfaces (skin) to each layer
-    osurf = g4.solid.OpticalSurface(f"{name}_os", model="unified", finish="polished",
-                                    surf_type="dielectric_dielectric", value=1.0, registry=registry)
-    for lv in [tpb_lv, cl2_inner_lv, cl1_inner_lv, core_lv, cl1_outer_lv, cl2_outer_lv]:
+
+    # -------------------------
+    # Solids
+    # -------------------------
+    tpb_s      = g4.solid.Tubs(f"{base_name}_tpb_s", r_tpb_in, r_tpb_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
+    cl2_in_s   = g4.solid.Tubs(f"{base_name}_cl2_in_s", r_cl2_in, r_cl2_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
+    cl1_in_s   = g4.solid.Tubs(f"{base_name}_cl1_in_s", r_cl1_in, r_cl1_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
+    core_s     = g4.solid.Tubs(f"{base_name}_core_s", r_core_in, r_core_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
+    cl1_out_s  = g4.solid.Tubs(f"{base_name}_cl1_out_s", r_cl1_out_in, r_cl1_out_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
+    cl2_out_s  = g4.solid.Tubs(f"{base_name}_cl2_out_s", r_cl2_out_in, r_cl2_out_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
+
+    tpb_lv      = g4.LogicalVolume(tpb_s, material_tpb, f"{base_name}_tpb_lv", registry)
+    cl2_in_lv   = g4.LogicalVolume(cl2_in_s, material_clad2, f"{base_name}_cl2_in_lv", registry)
+    cl1_in_lv   = g4.LogicalVolume(cl1_in_s, material_clad1, f"{base_name}_cl1_in_lv", registry)
+    core_lv     = g4.LogicalVolume(core_s, material_core, f"{base_name}_core_lv", registry)
+    cl1_out_lv  = g4.LogicalVolume(cl1_out_s, material_clad1, f"{base_name}_cl1_out_lv", registry)
+    cl2_out_lv  = g4.LogicalVolume(cl2_out_s, material_clad2, f"{base_name}_cl2_out_lv", registry)
+    
+    tpb_pv     = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], tpb_lv, f"{base_name}_tpb_pv", cl2_in_lv, registry)
+    cl2_in_pv  = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl2_in_lv, f"{base_name}_cl2_in_pv", cl1_in_lv, registry)
+    cl1_in_pv  = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl1_in_lv, f"{base_name}_cl1_in_pv", core_lv, registry)
+    core_pv    = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], core_lv, f"{base_name}_core_pv", cl1_out_lv, registry)
+    cl1_out_pv = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl1_out_lv, f"{base_name}_cl1_out_pv", cl2_out_lv, registry)
+    cl2_out_pv = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl2_out_lv, f"{base_name}_cl2_out_pv", lar_lv, registry)
+
+
+  
+
+    # -------------------------
+    # Optical boundaries
+    # -------------------------
+    osurf = g4.solid.OpticalSurface(
+        f"{base_name}_os",
+        model="unified",
+        finish="polished",
+        surf_type="dielectric_dielectric",
+        value=1.0,
+        registry=registry
+    )
+
+    for lv in (tpb_lv, cl2_in_lv, cl1_in_lv, core_lv, cl1_out_lv, cl2_out_lv):
         g4.SkinSurface(f"{lv.name}_os", lv, osurf, registry=registry)
 
-    outer_radius_mm = r_cl2_outer_out
-    half_length_mm = fiber_half_len_mm
-    return cl2_outer_lv, core_lv, core_pv, outer_radius_mm, half_length_mm
+    # -------------------------
+    # Return
+    # -------------------------
+    return cl2_out_lv, {
+        "tpb_pv": tpb_pv,
+        "cl2_in_pv": cl2_in_pv,
+        "cl1_in_pv": cl1_in_pv,
+        "core_pv": core_pv,
+        "cl1_out_pv": cl1_out_pv,
+        "cl2_out_pv": cl2_out_pv,
+        "tpb_lv": tpb_lv,
+        "cl2_in_lv": cl2_in_lv,
+        "cl1_in_lv": cl1_in_lv,
+        "core_lv": core_lv,
+        "cl1_out_lv": cl1_out_lv,
+        "cl2_out_lv": cl2_out_lv
+    }
 
-fibers = []
-fiber_lv, fiber_core_lv, fiber_core_pv, fiber_outer_r_mm, fiber_half_len_mm = make_fiberoptic_shroud_mm(
-    name="fiber_shroud",
-    inner_radius_mm=60.0,
-    fiber_half_len_mm=220.0,
+
+fiber_outer_lv, fibers_dict = make_fiberoptic_shroud(
     registry=reg,
-    mats=mats,
-    parent_lv=lar_lv
+    lar_lv=lar_lv,
+    length=220.0,
+    r_inner_most=60.0,
+    t_core = 1.0,
+    t_clad1=0.2,
+    t_clad2=0.4,
+    t_tpb=0.001,
+    material_core=mats.ps_fibers,
+    material_clad1=mats.pmma,
+    material_clad2=mats.pmma_out,
+    material_tpb=mats.tpb_on_fibers,
+    base_name="fiber_shroud"
 )
 
-fibers.append({"fiber_core_phys": fiber_core_pv})
 
 
-# Place fiber in LAr
-fiber_pv = g4.PhysicalVolume(
-    [0, 0, 0],
-    [0, 0, 0, "mm"],
-    fiber_lv,
-    "fiber_shroud_pv",
-    lar_lv,
+
+
+# Access core for border surfaces
+fiber_outer_pv = fibers_dict["cl2_out_pv"]
+fiber_core_pv = fibers_dict["core_pv"]
+tpb_pv = fibers_dict["tpb_pv"]
+
+
+# -----------------------------
+# Access PVs and LVs for optical surfaces / other use
+# -----------------------------
+fiber_core_pv = fibers_dict["core_pv"]
+tpb_pv = fibers_dict["tpb_pv"]
+cl1_in_pv = fibers_dict["cl1_in_pv"]
+cl2_in_pv = fibers_dict["cl2_in_pv"]
+cl2_out_lv = fibers_dict["cl2_out_lv"]
+cl2_out_pv =fibers_dict["cl2_out_pv"]
+
+fiber_outer_lv = fibers_dict["cl2_out_lv"]  # outermost logical volume
+
+
+
+fibers =[]
+# Save core PV for border surface
+fibers = [{"fiber_core_phys": fiber_core_pv}]
+
+# Place the entire fiber optic inside the LAr volume
+cl2_out_pv = g4.PhysicalVolume(
+    [0, 0, 0],              # position (x, y, z) in mm
+    [0, 0, 0, "mm"],        # rotation (no rotation)
+    cl2_out_lv,             # logical volume to place
+    "fiber_shroud_cl2", # name of the physical volume
+    lar_lv,                 # mother logical volume (LAr)
     registry=reg
 )
+# -----------------------------
+# Build nested fiber shroud (single call)
+# -----------------------------
 
 # -----------------------------
 # 2️⃣ Circular SiPM (G4_Si)
 # -----------------------------
 sipm_inner_r_mm = 60.0
+
+fiber_outer_lv = fibers_dict["cl2_out_lv"]  # logical volume of outermost fiber
+fiber_outer_r_mm = fiber_outer_lv.solid.pRMax  # outer radius
+fiber_half_len_mm = fiber_outer_lv.solid.pDz  # half-length along z
+
+print("Half-length along Z (mm):", fiber_outer_lv.solid.pDz)
+print("Inner radius (mm):", fiber_outer_lv.solid.pRMin)
+print("Outer radius (mm):", fiber_outer_lv.solid.pRMax)
+
+
 sipm_outer_r_mm = fiber_outer_r_mm  # match fiber outer radius
 sipm_half_thickness_mm = 0.5        # 1 mm thick -> half-length 0.5 mm
 
@@ -496,6 +665,8 @@ sipm_ring_s = solid.Tubs(
     registry=reg,
     lunit="mm"
 )
+
+
 
 sipm_ring_lv = g4.LogicalVolume(sipm_ring_s, g4.MaterialPredefined("G4_Si"), "sipm_ring_lv", registry=reg)
 
@@ -562,20 +733,19 @@ sipm_surf.addVecProperty("EFFICIENCY", [1, 10], [1, 1])
 sipm_surf.addVecProperty("REFLECTIVITY", [1, 10], [0, 0])
 
 
-bege_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 1, bege_meta)
-icpc_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 2, icpc_meta)
-enclosure_bege_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 3, "name:enclosure_bege_lv")
-enclosure_icpc_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 4, "name:enclosure_icpc_lv")
-sipm_top_pv.pygeom_active_detector = RemageDetectorInfo("optical", 5, {"name": "sipm_top_lv"})
-sipm_bottom_pv.pygeom_active_detector = RemageDetectorInfo("optical", 6, {"name": "sipm_bottom_pv"})
-lar_lv.pygeom_active_detector = RemageDetectorInfo("scintillator", 7, {"name": "LAr"})
-
+bege_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 101, bege_meta)
+icpc_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 102, icpc_meta)
+enclosure_bege_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 201, "name:enclosure_bege_pv")
+enclosure_icpc_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 202, "name:enclosure_icpc_pv")
+sipm_top_pv.pygeom_active_detector = RemageDetectorInfo("optical", 301, {"name": "sipm_top_pv"})
+sipm_bottom_pv.pygeom_active_detector = RemageDetectorInfo("optical", 302, {"name": "sipm_bottom_pv"})
+lar_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 401, {"name": "LAr_pv"})
 
 
 # -----------------------------
 # Add detector origins (so your tools that expect these keep working)
 # -----------------------------
-for pv in [bege_pv, icpc_pv, enclosure_bege_pv, enclosure_icpc_pv, lar_pv, fiber_pv]:
+for pv in [bege_pv, icpc_pv, enclosure_bege_pv, enclosure_icpc_pv, lar_pv]:
     add_detector_origin(pv.name, pv, reg)
 
 
