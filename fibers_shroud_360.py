@@ -4,6 +4,8 @@ from __future__ import annotations
 import pint
 import pyg4ometry.geant4 as g4
 import pyg4ometry as pg4
+from pygeomtools import write_pygeom
+
 
 from pygeoml1000.fibers import FiberModuleData, ModuleFactorySingleFibers
 from pygeomtools.materials import BaseMaterialRegistry, cached_property
@@ -157,61 +159,49 @@ class DummyB:
 
         self.special_metadata = type("",(),{})()
         self.special_metadata.hpge_string = {
-            "0": S(0,150),
-            "1": S(120,150),
-            "2": S(240,150),
+        # ---------- inner shell ----------
+        "0": S(0,   150),
+        "1": S(120, 150),
+        "2": S(240, 150),
+
+        # ---------- outer shell (rotated by 60°) ----------
+        "3": S(60,  170),
+        "4": S(180, 170),
+        "5": S(300, 170),
         }
 
         world = g4.solid.Box("world",4000,4000,4000,reg)
         self.mother_lv = g4.LogicalVolume(world, self.materials.liquidargon, "world_lv", reg)
         self.mother_pv = g4.PhysicalVolume([0,0,0],[0,0,0],self.mother_lv,"world_pv",None,reg)
+        reg.setWorld(self.mother_lv)
 
 b = DummyB()
 
 # ============================================================
 # 3 fiber modules → 360°
 # ============================================================
-mods = [
-    FiberModuleData(
-        barrel="inner",
-        name="IB0",
-        tpb_thickness=150,
-        channel_top_name="sipm_top_0",
-        channel_bottom_name="sipm_bot_0",
-        channel_top_rawid=1,
-        channel_bottom_rawid=2,
-        string_id="0",
-    ),
-    FiberModuleData(
-        barrel="inner",
-        name="IB1",
-        tpb_thickness=150,
-        channel_top_name="sipm_top_1",
-        channel_bottom_name="sipm_bot_1",
-        channel_top_rawid=3,
-        channel_bottom_rawid=4,
-        string_id="1",
-    ),
-    FiberModuleData(
-        barrel="inner",
-        name="IB2",
-        tpb_thickness=150,
-        channel_top_name="sipm_top_2",
-        channel_bottom_name="sipm_bot_2",
-        channel_top_rawid=5,
-        channel_bottom_rawid=6,
-        string_id="2",
-    ),
-]
-
+mods = []
+for i in range(6):
+    mods.append(
+        FiberModuleData(
+            barrel="inner",
+            name=f"IB{i}",
+            tpb_thickness=150,
+            channel_top_name=f"sipm_top_{i}",
+            channel_bottom_name=f"sipm_bot_{i}",
+            channel_top_rawid=1000 + 2*i,
+            channel_bottom_rawid=1001 + 2*i,
+            string_id=str(i),
+        )
+    )
 
 
 factory = ModuleFactorySingleFibers(
     radius_mm=150,
     fiber_length_mm=1200,
-    fiber_count_per_module=200,
+    fiber_count_per_module=30,
     bend_radius_mm=None,
-    number_of_modules=3,
+    number_of_modules=6,
     z_displacement_mm=0,
     materials=b.materials,
     registry=reg,
@@ -236,4 +226,7 @@ viewer = pg4.visualisation.VtkViewerColoured(
 
 viewer.addLogicalVolume(b.mother_lv)
 viewer.view()
+write_pygeom(reg, "fibers360.gdml")
+print("Saved fibers360.gdml")
+
 
