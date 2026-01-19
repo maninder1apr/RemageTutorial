@@ -6,12 +6,31 @@
 ######################################################
 # Geometry setup
 ######################################################
-/RMG/Geometry/RegisterDetector Germanium BEGe 001
-/RMG/Geometry/RegisterDetector Germanium Coax 002
-#/RMG/Geometry/RegisterDetector Scintillator LAr 003
-/RMG/Geometry/RegisterDetector Scintillator PEN_Coax 003
-/RMG/Geometry/RegisterDetector Scintillator PEN_BEGe 004
-/RMG/Geometry/RegisterDetector Scintillator PEN_stl 005
+
+/RMG/Geometry/RegisterDetector Germanium   BEGe_pv     101
+/RMG/Geometry/RegisterDetector Germanium   ICPC_pv     102
+
+/RMG/Geometry/RegisterDetector Scintillator enclosure_bege_pv 201
+/RMG/Geometry/RegisterDetector Scintillator enclosure_icpc_pv 202
+
+/RMG/Geometry/RegisterDetector Scintillator LAr_pv 401
+
+# Optical channels (SiPMs)
+# top ring
+/RMG/Geometry/RegisterDetector Optical sipm_top_0 1000
+/RMG/Geometry/RegisterDetector Optical sipm_top_1 1002
+/RMG/Geometry/RegisterDetector Optical sipm_top_2 1004
+/RMG/Geometry/RegisterDetector Optical sipm_top_3 1006
+/RMG/Geometry/RegisterDetector Optical sipm_top_4 1008
+/RMG/Geometry/RegisterDetector Optical sipm_top_5 1010
+
+# bottom ring
+/RMG/Geometry/RegisterDetector Optical sipm_bot_0 1001
+/RMG/Geometry/RegisterDetector Optical sipm_bot_1 1003
+/RMG/Geometry/RegisterDetector Optical sipm_bot_2 1005
+/RMG/Geometry/RegisterDetector Optical sipm_bot_3 1007
+/RMG/Geometry/RegisterDetector Optical sipm_bot_4 1009
+/RMG/Geometry/RegisterDetector Optical sipm_bot_5 1011
 
 /run/initialize
 
@@ -54,7 +73,7 @@
 # Source setup
 ######################################################
 /RMG/Generator/Confine Volume
-/RMG/Generator/Confinement/Physical/AddVolume Source
+/RMG/Generator/Confinement/Physical/AddVolume LAr_pv
 
 /RMG/Generator/Select GPS
 /gps/particle gamma
@@ -64,4 +83,4 @@
 ######################################################
 # Run
 ######################################################
-/run/beamOn 1000
+/run/beamOn 10000
