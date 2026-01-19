@@ -2743,7 +2743,20 @@
 		</bordersurface>
 	</structure>
 	<userinfo>
-		<auxiliary auxtype="RMG_detector_meta" auxvalue=""/>
+		<auxiliary auxtype="RMG_detector_meta" auxvalue="">
+			<auxiliary auxtype="sipm_top_0" auxvalue="{&quot;name&quot;: &quot;sipm_top_0&quot;}"/>
+			<auxiliary auxtype="sipm_bot_0" auxvalue="{&quot;name&quot;: &quot;sipm_bot_0&quot;}"/>
+			<auxiliary auxtype="sipm_top_1" auxvalue="{&quot;name&quot;: &quot;sipm_top_1&quot;}"/>
+			<auxiliary auxtype="sipm_bot_1" auxvalue="{&quot;name&quot;: &quot;sipm_bot_1&quot;}"/>
+			<auxiliary auxtype="sipm_top_2" auxvalue="{&quot;name&quot;: &quot;sipm_top_2&quot;}"/>
+			<auxiliary auxtype="sipm_bot_2" auxvalue="{&quot;name&quot;: &quot;sipm_bot_2&quot;}"/>
+			<auxiliary auxtype="sipm_top_3" auxvalue="{&quot;name&quot;: &quot;sipm_top_3&quot;}"/>
+			<auxiliary auxtype="sipm_bot_3" auxvalue="{&quot;name&quot;: &quot;sipm_bot_3&quot;}"/>
+			<auxiliary auxtype="sipm_top_4" auxvalue="{&quot;name&quot;: &quot;sipm_top_4&quot;}"/>
+			<auxiliary auxtype="sipm_bot_4" auxvalue="{&quot;name&quot;: &quot;sipm_bot_4&quot;}"/>
+			<auxiliary auxtype="sipm_top_5" auxvalue="{&quot;name&quot;: &quot;sipm_top_5&quot;}"/>
+			<auxiliary auxtype="sipm_bot_5" auxvalue="{&quot;name&quot;: &quot;sipm_bot_5&quot;}"/>
+		</auxiliary>
 		<auxiliary auxtype="RMG_detector" auxvalue="optical">
 			<auxiliary auxtype="sipm_top_0" auxvalue="1000"/>
 			<auxiliary auxtype="sipm_bot_0" auxvalue="1001"/>

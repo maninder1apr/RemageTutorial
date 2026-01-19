@@ -13,7 +13,7 @@ import pyg4ometry.geant4.solid as solid
 import pyg4ometry as pg4
 from math import pi
 from functools import cached_property
-import legendoptics.fibers
+
 import legendoptics.tpb
 import legendoptics.pen
 import legendoptics.lar
@@ -29,6 +29,9 @@ from legendoptics.pen import (
     pyg4_pen_attach_wls,
     pyg4_pen_attach_scintillation,
 )
+
+
+from fibers_shroud_360 import build_fiber_shroud
 import numpy as np
 import pint
 from pygeomtools import RemageDetectorInfo, write_pygeom
@@ -51,9 +54,70 @@ u = pint.get_application_registry()
 # -----------------------------
 class OpticalMaterialRegistry(BaseMaterialRegistry):
     def __init__(self, g4_registry: g4.Registry):
-        # keep LAr temperature in kelvin
-        self.lar_temperature = 88.8 *u.K
+        self.lar_temperature = 88.8 * u.K
         super().__init__(g4_registry)
+        self._build_surfaces()
+
+    def _build_surfaces(self):
+        self.surfaces = type("Surfaces", (), {})()
+
+    # -------------------------
+    # LAr → TPB
+    # -------------------------
+        self.surfaces.lar_to_tpb = g4.solid.OpticalSurface(
+        name="os_lar_tpb",
+        model="unified",
+        finish="ground",
+        surf_type="dielectric_dielectric",
+        value=1.0,
+        registry=self.g4_registry,
+    )
+        self.surfaces.lar_to_tpb.addConstProperty("SIGMA_ALPHA", 0.2)
+        self.surfaces.lar_to_tpb.addConstProperty("DIFFUSELOBECONSTANT", 0.7)
+        self.surfaces.lar_to_tpb.addConstProperty("SPECULARLOBECONSTANT", 0.2)
+        self.surfaces.lar_to_tpb.addConstProperty("SPECULARSPIKECONSTANT", 0.1)
+        self.surfaces.lar_to_tpb.addConstProperty("BACKSCATTERCONSTANT", 0.0)
+
+    # -------------------------
+    # LAr → SiPM (PDE)
+    # -------------------------
+        self.surfaces.to_sipm_silicon = g4.solid.OpticalSurface(
+        name="os_lar_sipm",
+        model="unified",
+        finish="polished",
+        surf_type="dielectric_metal",
+        value=0,
+        registry=self.g4_registry,
+        )
+
+        # Photon energies in eV (ascending)
+        E = [
+        0.5,   # IR
+        1.24,  # 1000 nm  (turn on)
+        3.10,  # 400 nm   (turn off)
+        6.0    # deep UV
+            ]
+
+# Quantum efficiency (PDE)
+        QE = [
+        0.0,   # below 1000 nm
+        1.0,   # fully sensitive
+        1.0,   # fully sensitive
+        0.0    # above 400 nm
+            ]
+
+# Reflection (0 = absorb everything not detected)
+        R = [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+            ]
+
+        self.surfaces.to_sipm_silicon.addVecProperty("EFFICIENCY", E, QE)
+        self.surfaces.to_sipm_silicon.addVecProperty("REFLECTIVITY", E, R)
+
+
 
     @pg_cached_property
     def liquidargon(self) -> g4.Material:
@@ -137,10 +201,24 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         legendoptics.tpb.pyg4_tpb_attach_rindex(t, self.g4_registry)
         legendoptics.tpb.pyg4_tpb_attach_wls(t, self.g4_registry)
         return t
-
+    
     @pg_cached_property
     def tpb_on_fibers(self) -> g4.Material:
-        return self._tpb("tpb_on_fibers")
+        m = g4.Material(
+        name="tpb_on_fibers",
+        density=1.08,
+        number_of_components=2,
+        state="solid",
+        registry=self.g4_registry,
+        )
+        m.add_element_natoms(self.get_element("H"), natoms=22)
+        m.add_element_natoms(self.get_element("C"), natoms=28)
+
+        legendoptics.tpb.pyg4_tpb_attach_rindex(m, self.g4_registry)
+        legendoptics.tpb.pyg4_tpb_attach_wls(m, self.g4_registry)
+        return m
+
+
 
     @pg_cached_property
     def os_fibers(self) -> g4.solid.OpticalSurface:
@@ -173,11 +251,74 @@ class OpticalMaterialRegistry(BaseMaterialRegistry):
         legendoptics.pen.pyg4_pen_attach_wls(m, self.g4_registry)
         legendoptics.pen.pyg4_pen_attach_scintillation(m, self.g4_registry)
         return m
+    
+    @pg_cached_property
+    def metal_silicon(self):
+            m = g4.Material(name="metal_silicon", density=2.33, number_of_components=1, registry=self.g4_registry)
+            m.add_element_natoms(self.get_element("Si"),1)
+            return m
+
+    @pg_cached_property
+    def metal_copper(self):
+        m = g4.Material(name="metal_copper", density=8.96, number_of_components=1, registry=self.g4_registry)
+        m.add_element_natoms(self.get_element("Cu"),1)
+        return m
+    
+    
+    '''
+    
+    @pg_cached_property
+    def surfaces(self):
+        class S:
+            def __init__(self, reg):
+
+            # -------------------------
+            # LAr → TPB
+            # -------------------------
+                self.lar_to_tpb = g4.solid.OpticalSurface(
+                name="os_lar_tpb",
+                model="unified",
+                finish="ground",
+                surf_type="dielectric_dielectric",
+                value=1.0,
+                registry=reg,
+            )
+
+                self.lar_to_tpb.addConstProperty("SIGMA_ALPHA", 0.2)
+                self.lar_to_tpb.addConstProperty("DIFFUSELOBECONSTANT", 0.7)
+                self.lar_to_tpb.addConstProperty("SPECULARLOBECONSTANT", 0.2)
+                self.lar_to_tpb.addConstProperty("SPECULARSPIKECONSTANT", 0.1)
+                self.lar_to_tpb.addConstProperty("BACKSCATTERCONSTANT", 0.0)
+
+            # -------------------------
+            # LAr → SiPM
+            # -------------------------
+                self.to_sipm_silicon = g4.solid.OpticalSurface(
+                name="os_lar_sipm",
+                model="unified",
+                finish="polished",
+                surf_type="dielectric_metal",
+                value=1.0,
+                registry=reg,
+            )
+
+                self.to_sipm_silicon.addConstProperty("SIGMA_ALPHA", 0.05)
+                self.to_sipm_silicon.addConstProperty("SPECULARSPIKECONSTANT", 0.6)
+                self.to_sipm_silicon.addConstProperty("SPECULARLOBECONSTANT", 0.3)
+                self.to_sipm_silicon.addConstProperty("DIFFUSELOBECONSTANT", 0.1)
+                self.to_sipm_silicon.addConstProperty("BACKSCATTERCONSTANT", 0.0)
+
+        return S(self.g4_registry)
+  '''
 
 # -----------------------------
 # Instantiate materials
 # -----------------------------
 mats = OpticalMaterialRegistry(reg)
+print("SiPM surface type:", type(mats.surfaces.to_sipm_silicon))
+print("Is OpticalSurface:",
+      isinstance(mats.surfaces.to_sipm_silicon, g4.solid.OpticalSurface))
+
 
 # -----------------------------
 # Helper: add detector origins (same as you use elsewhere)
@@ -201,7 +342,7 @@ def add_detector_origin(name, pv, registry):
 # World & LAr (units: mm)
 # -----------------------------
 # World half-sizes: originally 200 cm -> 2000 mm
-world_half_mm = 2000.0
+world_half_mm = 500.0
 world_s = solid.Box("world_s", world_half_mm, world_half_mm, world_half_mm, registry=reg, lunit="mm")
 world_lv = g4.LogicalVolume(world_s, mats.liquidargon, "World_lv", registry=reg)
 reg.setWorld(world_lv)
@@ -212,6 +353,10 @@ lar_half_height_mm = 25.0 * 10.0  # 25.0 cm -> 250 mm
 lar_s = solid.Tubs("LAr_s", 0.0, lar_radius_mm, lar_half_height_mm, 0.0, 2.0 * math.pi, registry=reg, lunit="mm")
 lar_lv = g4.LogicalVolume(lar_s, mats.liquidargon, "LAr_lv", registry=reg, lunit="mm")
 lar_pv = g4.PhysicalVolume([0, 0, 0], [0, 0, 0, "mm"], lar_lv, "LAr_pv", world_lv, registry=reg)
+
+
+lar_pv = reg.physicalVolumeDict["LAr_pv"]
+
 
 
 #source_s = solid.Tubs("Source_s", 0, 1, 1, 0, 2*pi, registry=reg, lunit="cm")
@@ -330,6 +475,7 @@ def make_closed_cylinder_mm(name, inner_r_mm, outer_r_mm, height_mm, thickness_m
     )
 
     # Union top cap (move cap to +half_h)
+    
     enclosure_top = solid.Union(
         f"{name}_union_top",
         wall,
@@ -373,6 +519,56 @@ enclosure_icpc_solid = make_closed_cylinder_mm(
 enclosure_bege_lv = g4.LogicalVolume(enclosure_bege_solid, mats.pen, "enclosure_bege_lv", registry=reg)
 enclosure_icpc_lv = g4.LogicalVolume(enclosure_icpc_solid, mats.pen, "enclosure_icpc_lv", registry=reg)
 
+
+# ============================================================
+# Fiber shroud + SiPMs
+# ============================================================
+
+class Center:
+    def __init__(self, x, y):
+        self.x_in_mm = float(x)
+        self.y_in_mm = float(y)
+
+class String:
+    def __init__(self, angle, radius, center):
+        self.angle_in_deg = angle
+        self.radius_in_mm = float(radius)
+        self.center = center
+
+# LAr is centered at (0,0) in world coordinates
+cx = 0.0
+cy = 0.0
+
+fiber_inner_radius = 150   # mm
+fiber_outer_radius = 170   # mm
+
+hpge_string = {
+    "0": type("", (), {"angle_in_deg": 0,   "radius_in_mm": 150, "center": type("", (), {"x_in_mm": 0.0, "y_in_mm": 0.0})()})(),
+    "1": type("", (), {"angle_in_deg": 120, "radius_in_mm": 150, "center": type("", (), {"x_in_mm": 0.0, "y_in_mm": 0.0})()})(),
+    "2": type("", (), {"angle_in_deg": 240, "radius_in_mm": 150, "center": type("", (), {"x_in_mm": 0.0, "y_in_mm": 0.0})()})(),
+
+    "3": type("", (), {"angle_in_deg": 60,  "radius_in_mm": 170, "center": type("", (), {"x_in_mm": 0.0, "y_in_mm": 0.0})()})(),
+    "4": type("", (), {"angle_in_deg": 180, "radius_in_mm": 170, "center": type("", (), {"x_in_mm": 0.0, "y_in_mm": 0.0})()})(),
+    "5": type("", (), {"angle_in_deg": 300, "radius_in_mm": 170, "center": type("", (), {"x_in_mm": 0.0, "y_in_mm": 0.0})()})(),
+}
+
+
+# Tell pyg4ometry that LAr is a valid placement root
+reg.setWorld(lar_lv)
+
+sipms = build_fiber_shroud(reg, lar_pv, hpge_string, mats)
+# 🔧 Fix pyg4ometry orphaning: reattach SiPMs to LAr
+for pv in sipms.values():
+    pv.mother = lar_pv
+    pv.motherLV = lar_pv.logicalVolume
+
+
+reg.setWorld(world_lv)
+# ============================================================
+# SiPM optical detection surface (PDE)
+# ============================================================
+   
+
 # -----------------------------
 # PEN rough optical surface
 # -----------------------------
@@ -407,339 +603,20 @@ enclosure_icpc_pv = g4.PhysicalVolume(
 )
 
 
-
-'''
-
-def make_fully_nested_fiberoptic_shroud(
-    name="fiber_shroud",
-    core_radius_mm=1.0,
-    cl1_thickness_mm=0.2,
-    cl2_thickness_mm=0.3,
-    tpb_thickness_mm=0.1,
-    half_length_mm=50.0,
-    parent_lv=None,
-    registry=None
-):
-    
-
-    # -----------------------------
-    # Define radii and lengths
-    # -----------------------------
-    fiber_core_radius = core_radius_mm
-    fiber_half_len = half_length_mm
-
-    fiber_cl1_outer_radius = fiber_core_radius + cl1_thickness_mm
-    fiber_cl2_outer_radius = fiber_cl1_outer_radius + cl2_thickness_mm
-    fiber_outer_r = fiber_cl2_outer_radius + tpb_thickness_mm
-
-    # -----------------------------
-    # Core
-    # -----------------------------
-    core_solid = g4.Tubs(f"{name}_core_solid", 0, fiber_core_radius, fiber_half_len, 0, 360)
-    fiber_core_lv = g4.LogicalVolume(core_solid, "Scintillator", f"{name}_core_lv")
-    fiber_core_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_core_lv, f"{name}_core_pv", None, registry)
-
-    # -----------------------------
-    # Cladding 1
-    # -----------------------------
-    cl1_solid = g4.Tubs(f"{name}_cl1_solid", 0, fiber_cl1_outer_radius, fiber_half_len, 0, 360)
-    cl1_lv = g4.LogicalVolume(cl1_solid, "PMMA", f"{name}_cl1_lv")
-    cl1_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_core_lv, f"{name}_cl1_pv", fiber_core_lv, registry)
-
-    # -----------------------------
-    # Cladding 2
-    # -----------------------------
-    cl2_solid = g4.Tubs(f"{name}_cl2_solid", 0, fiber_cl2_outer_radius, fiber_half_len, 0, 360)
-    cl2_lv = g4.LogicalVolume(cl2_solid, "FluoroPolymer", f"{name}_cl2_lv")
-    cl2_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl2_lv, f"{name}_cl2_pv", cl1_lv, registry)
-
-    # -----------------------------
-    # TPB coating (outermost)
-    # -----------------------------
-    tpb_solid = g4.Tubs(f"{name}_tpb_solid", 0, fiber_outer_r, fiber_half_len, 0, 360)
-    fiber_lv = g4.LogicalVolume(tpb_solid, "TPB", f"{name}_tpb_lv")
-    tpb_pv = g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_lv, f"{name}_tpb_pv", parent_lv, registry)
-
-    # -----------------------------
-    # Nest daughters properly
-    # -----------------------------
-    # Core inside cl1
-    g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], fiber_core_lv, f"{name}_core_pv", cl1_lv, registry)
-    # Cl1 inside cl2
-    g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl1_lv, f"{name}_cl1_pv", cl2_lv, registry)
-    # Cl2 inside TPB
-    g4.PhysicalVolume([0,0,0], [0,0,0,"mm"], cl2_lv, f"{name}_cl2_pv", fiber_lv, registry)
-
-    # -----------------------------
-    # Return in the order your code expects
-    # -----------------------------
-    return fiber_lv, fiber_core_lv, fiber_core_pv, fiber_outer_r, fiber_half_len
-'''
-
-def make_fiberoptic_shroud(
-    registry,
-    lar_lv,
-    length,
-    r_inner_most,
-    t_core,
-    t_clad1,
-    t_clad2,
-    t_tpb,
-    material_core,
-    material_clad1,
-    material_clad2,
-    material_tpb,
-    base_name="fiber"
-):
-    """
-    Build a fiber optic shroud with layers:
-    TPB (innermost) -> Cladding2 inner -> Cladding1 inner -> Core 
-    -> Cladding1 outer -> Cladding2 outer (outermost) -> LAr
-    All radii are contiguous. Optical surfaces are added between layers.
-    """
-
-    # -------------------------
-    # Radii (contiguous)
-    # -------------------------
-    r_tpb_in    = r_inner_most                       # 60 mm
-    r_tpb_out   = r_tpb_in + t_tpb                   # 60 + 0.001
-
-    r_cl2_in    = r_tpb_out                          # 60.001
-    r_cl2_out   = r_cl2_in + t_clad2                 # 60.001 + 0.4 = 60.401
-
-    r_cl1_in    = r_cl2_out                           # 60.401
-    r_cl1_out   = r_cl1_in + t_clad1                  # 60.401 + 0.2 = 60.601
-
-    r_core_in   = r_cl1_out                           # 60.601
-    r_core_out  = r_core_in + t_core                  # 60.601 + t_core
-
-    r_cl1_out_in  = r_core_out                       # outer Cladding1 inner radius
-    r_cl1_out_out = r_cl1_out_in + t_clad1           # +0.2
-
-    r_cl2_out_in  = r_cl1_out_out                     # outer Cladding2 inner radius
-    r_cl2_out_out = r_cl2_out_in + t_clad2           # +0.4
-
-
-    # -------------------------
-    # Solids
-    # -------------------------
-    tpb_s      = g4.solid.Tubs(f"{base_name}_tpb_s", r_tpb_in, r_tpb_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
-    cl2_in_s   = g4.solid.Tubs(f"{base_name}_cl2_in_s", r_cl2_in, r_cl2_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
-    cl1_in_s   = g4.solid.Tubs(f"{base_name}_cl1_in_s", r_cl1_in, r_cl1_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
-    core_s     = g4.solid.Tubs(f"{base_name}_core_s", r_core_in, r_core_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
-    cl1_out_s  = g4.solid.Tubs(f"{base_name}_cl1_out_s", r_cl1_out_in, r_cl1_out_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
-    cl2_out_s  = g4.solid.Tubs(f"{base_name}_cl2_out_s", r_cl2_out_in, r_cl2_out_out, length, 0, 2*np.pi, registry=registry, lunit="mm")
-
-    tpb_lv      = g4.LogicalVolume(tpb_s, material_tpb, f"{base_name}_tpb_lv", registry)
-    cl2_in_lv   = g4.LogicalVolume(cl2_in_s, material_clad2, f"{base_name}_cl2_in_lv", registry)
-    cl1_in_lv   = g4.LogicalVolume(cl1_in_s, material_clad1, f"{base_name}_cl1_in_lv", registry)
-    core_lv     = g4.LogicalVolume(core_s, material_core, f"{base_name}_core_lv", registry)
-    cl1_out_lv  = g4.LogicalVolume(cl1_out_s, material_clad1, f"{base_name}_cl1_out_lv", registry)
-    cl2_out_lv  = g4.LogicalVolume(cl2_out_s, material_clad2, f"{base_name}_cl2_out_lv", registry)
-    
-    tpb_pv     = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], tpb_lv, f"{base_name}_tpb_pv", cl2_in_lv, registry)
-    cl2_in_pv  = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl2_in_lv, f"{base_name}_cl2_in_pv", cl1_in_lv, registry)
-    cl1_in_pv  = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl1_in_lv, f"{base_name}_cl1_in_pv", core_lv, registry)
-    core_pv    = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], core_lv, f"{base_name}_core_pv", cl1_out_lv, registry)
-    cl1_out_pv = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl1_out_lv, f"{base_name}_cl1_out_pv", cl2_out_lv, registry)
-    cl2_out_pv = g4.PhysicalVolume([0,0,0],[0,0,0,"mm"], cl2_out_lv, f"{base_name}_cl2_out_pv", lar_lv, registry)
-
-
-  
-
-    # -------------------------
-    # Optical boundaries
-    # -------------------------
-    osurf = g4.solid.OpticalSurface(
-        f"{base_name}_os",
-        model="unified",
-        finish="polished",
-        surf_type="dielectric_dielectric",
-        value=1.0,
-        registry=registry
-    )
-
-    for lv in (tpb_lv, cl2_in_lv, cl1_in_lv, core_lv, cl1_out_lv, cl2_out_lv):
-        g4.SkinSurface(f"{lv.name}_os", lv, osurf, registry=registry)
-
-    # -------------------------
-    # Return
-    # -------------------------
-    return cl2_out_lv, {
-        "tpb_pv": tpb_pv,
-        "cl2_in_pv": cl2_in_pv,
-        "cl1_in_pv": cl1_in_pv,
-        "core_pv": core_pv,
-        "cl1_out_pv": cl1_out_pv,
-        "cl2_out_pv": cl2_out_pv,
-        "tpb_lv": tpb_lv,
-        "cl2_in_lv": cl2_in_lv,
-        "cl1_in_lv": cl1_in_lv,
-        "core_lv": core_lv,
-        "cl1_out_lv": cl1_out_lv,
-        "cl2_out_lv": cl2_out_lv
-    }
-
-
-fiber_outer_lv, fibers_dict = make_fiberoptic_shroud(
-    registry=reg,
-    lar_lv=lar_lv,
-    length=220.0,
-    r_inner_most=60.0,
-    t_core = 1.0,
-    t_clad1=0.2,
-    t_clad2=0.4,
-    t_tpb=0.001,
-    material_core=mats.ps_fibers,
-    material_clad1=mats.pmma,
-    material_clad2=mats.pmma_out,
-    material_tpb=mats.tpb_on_fibers,
-    base_name="fiber_shroud"
-)
-
-
-
-
-
-# Access core for border surfaces
-fiber_outer_pv = fibers_dict["cl2_out_pv"]
-fiber_core_pv = fibers_dict["core_pv"]
-tpb_pv = fibers_dict["tpb_pv"]
-
-
-# -----------------------------
-# Access PVs and LVs for optical surfaces / other use
-# -----------------------------
-fiber_core_pv = fibers_dict["core_pv"]
-tpb_pv = fibers_dict["tpb_pv"]
-cl1_in_pv = fibers_dict["cl1_in_pv"]
-cl2_in_pv = fibers_dict["cl2_in_pv"]
-cl2_out_lv = fibers_dict["cl2_out_lv"]
-cl2_out_pv =fibers_dict["cl2_out_pv"]
-
-fiber_outer_lv = fibers_dict["cl2_out_lv"]  # outermost logical volume
-
-
-
-fibers =[]
-# Save core PV for border surface
-fibers = [{"fiber_core_phys": fiber_core_pv}]
-
-# Place the entire fiber optic inside the LAr volume
-cl2_out_pv = g4.PhysicalVolume(
-    [0, 0, 0],              # position (x, y, z) in mm
-    [0, 0, 0, "mm"],        # rotation (no rotation)
-    cl2_out_lv,             # logical volume to place
-    "fiber_shroud_cl2", # name of the physical volume
-    lar_lv,                 # mother logical volume (LAr)
-    registry=reg
-)
-# -----------------------------
-# Build nested fiber shroud (single call)
-# -----------------------------
-
-# -----------------------------
-# 2️⃣ Circular SiPM (G4_Si)
-# -----------------------------
-sipm_inner_r_mm = 60.0
-
-fiber_outer_lv = fibers_dict["cl2_out_lv"]  # logical volume of outermost fiber
-fiber_outer_r_mm = fiber_outer_lv.solid.pRMax  # outer radius
-fiber_half_len_mm = fiber_outer_lv.solid.pDz  # half-length along z
-
-print("Half-length along Z (mm):", fiber_outer_lv.solid.pDz)
-print("Inner radius (mm):", fiber_outer_lv.solid.pRMin)
-print("Outer radius (mm):", fiber_outer_lv.solid.pRMax)
-
-
-sipm_outer_r_mm = fiber_outer_r_mm  # match fiber outer radius
-sipm_half_thickness_mm = 0.5        # 1 mm thick -> half-length 0.5 mm
-
-sipm_ring_s = solid.Tubs(
-    "sipm_ring_s",
-    sipm_inner_r_mm,
-    sipm_outer_r_mm,
-    sipm_half_thickness_mm,
-    0,
-    2 * math.pi,
-    registry=reg,
-    lunit="mm"
-)
-
-
-
-sipm_ring_lv = g4.LogicalVolume(sipm_ring_s, g4.MaterialPredefined("G4_Si"), "sipm_ring_lv", registry=reg)
-
-# -----------------------------
-# 3️⃣ Place top & bottom SiPMs
-# -----------------------------
-sipm_z_top = fiber_half_len_mm/2. + sipm_half_thickness_mm
-sipm_z_bottom = -fiber_half_len_mm/2. - sipm_half_thickness_mm
-
-sipm_top_pv = g4.PhysicalVolume(
-    [0, 0, 0, "deg"],
-    [0, 0, sipm_z_top, "mm"],
-    sipm_ring_lv,
-    "sipm_top_pv",
-    lar_lv,
-    reg
-)
-
-sipm_bottom_pv = g4.PhysicalVolume(
-    [0, 0, 0, "deg"],
-    [0, 0, sipm_z_bottom, "mm"],
-    sipm_ring_lv,
-    "sipm_bottom_pv",
-    lar_lv,
-    reg
-)
-
-# -----------------------------
-# 4️⃣ Optical surface
-# -----------------------------
-sipm_surf = g4.solid.OpticalSurface(
-    name="sipm_surf",
-    model="unified",
-    finish="polished",
-    surf_type="dielectric_metal",
-    value=1.0,
-    registry=reg
-)
-
-# SkinSurface for visual / optical properties
-g4.SkinSurface("surface_sipm_top", sipm_ring_lv, sipm_surf, reg)
-g4.SkinSurface("surface_sipm_bottom", sipm_ring_lv, sipm_surf, reg)
-
-# -----------------------------
-# 5️⃣ BorderSurface: fiber core -> SiPM
-# -----------------------------
-g4.BorderSurface(
-    "fiber_to_sipm_top",
-    fibers[0]["fiber_core_phys"],  # fiber core PV
-    sipm_top_pv,
-    sipm_surf,
-    reg
-)
-
-g4.BorderSurface(
-    "fiber_to_sipm_bottom",
-    fibers[0]["fiber_core_phys"],
-    sipm_bottom_pv,
-    sipm_surf,
-    reg
-)
-
-sipm_surf.addVecProperty("EFFICIENCY", [1, 10], [1, 1])
-sipm_surf.addVecProperty("REFLECTIVITY", [1, 10], [0, 0])
-
-
 bege_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 101, bege_meta)
 icpc_pv.pygeom_active_detector = RemageDetectorInfo("germanium", 102, icpc_meta)
 enclosure_bege_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 201, "name:enclosure_bege_pv")
 enclosure_icpc_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 202, "name:enclosure_icpc_pv")
-sipm_top_pv.pygeom_active_detector = RemageDetectorInfo("optical", 301, {"name": "sipm_top_pv"})
-sipm_bottom_pv.pygeom_active_detector = RemageDetectorInfo("optical", 302, {"name": "sipm_bottom_pv"})
 lar_pv.pygeom_active_detector = RemageDetectorInfo("scintillator", 401, {"name": "LAr_pv"})
+
+print("\nRegistered optical detectors:")
+for pv in reg.physicalVolumeDict.values():
+    det = getattr(pv, "pygeom_active_detector", None)
+    if det is not None and det.detector_type == "optical":
+        print(pv.name, det.detector_type)
+
+print("LAr PV object:", lar_pv)
+print("Registry LAr PV:", reg.physicalVolumeDict["LAr_pv"])
 
 
 # -----------------------------
@@ -749,18 +626,28 @@ for pv in [bege_pv, icpc_pv, enclosure_bege_pv, enclosure_icpc_pv, lar_pv]:
     add_detector_origin(pv.name, pv, reg)
 
 
+def pv_mother_name(pv):
+    if hasattr(pv, "mother") and pv.mother is not None:
+        return pv.mother.name
+    if hasattr(pv, "motherLV") and pv.motherLV is not None:
+        return pv.motherLV.name
+    return None
+
+print("\nOptical PV parents:")
+for pv in reg.physicalVolumeDict.values():
+    det = getattr(pv, "pygeom_active_detector", None)
+    if det and det.detector_type == "optical":
+        print(pv.name, "mother LV =", pv_mother_name(pv))
+
+
+
 # -----------------------------
 # Visualization (colours)
 # -----------------------------
 viewer = pg4.visualisation.VtkViewerColoured(
     materialVisOptions={
         "liquid_argon": [0, 1, 1, 0.08],
-        "PEN": [0.0, 0.6, 0.6, 0.4],
-        "ps_fibers": [1, 0, 0, 0.6],
-        "pmma": [0, 1, 0, 0.3],
-        "pmma_cl2": [0, 1, 0, 0.3],
-        "tpb_on_fibers": [1, 1, 0, 0],
-        "G4_Si":[1.0, 0.5, 0.0, 1.0]
+        "PEN": [0.0, 0.6, 0.6, 0.4]
     }
 )
 viewer.addLogicalVolume(reg.getWorldVolume())
@@ -773,5 +660,39 @@ viewer.view()
 # -----------------------------
 write_pygeom(reg, "combined_geometry.gdml")
 print("✅ Written combined_geometry.gdml")
+
+def dump_geometry_tree(registry):
+    print("\n========== GEOMETRY TREE ==========")
+
+    # Map: parent -> children
+    children = {}
+    for pv in registry.physicalVolumeDict.values():
+        parent = None
+        if hasattr(pv, "mother") and pv.mother is not None:
+            parent = pv.mother
+        elif hasattr(pv, "motherLV") and pv.motherLV is not None:
+            parent = pv.motherLV
+        children.setdefault(parent, []).append(pv)
+
+    def recurse(node, depth=0):
+        for pv in children.get(node, []):
+            lv = pv.logicalVolume
+            mat = lv.material.name if lv.material else "None"
+            print(
+                "  " * depth
+                + f"- {pv.name}  [LV={lv.name}, material={mat}]"
+            )
+            recurse(pv, depth + 1)
+
+    world = registry.getWorldVolume()
+    print(f"{world.name}  [WORLD]")
+    recurse(world)
+
+dump_geometry_tree(reg)
+
+
+
+
+
 
 # done

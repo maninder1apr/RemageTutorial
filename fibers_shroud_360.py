@@ -1,232 +1,92 @@
 #!/Users/maninder/Desktop/Programs/remage/build/python_venv/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import annotations
-import pint
 import pyg4ometry.geant4 as g4
-import pyg4ometry as pg4
-from pygeomtools import write_pygeom
-
-
 from pygeoml1000.fibers import FiberModuleData, ModuleFactorySingleFibers
-from pygeomtools.materials import BaseMaterialRegistry, cached_property
 
-import pygeomoptics.lar
-import pygeomoptics.fibers
-import pygeomoptics.tpb
-
-u = pint.get_application_registry()
-reg = g4.Registry()
 
 # ============================================================
-# Optical materials (UNCHANGED)
-# ============================================================
-class OpticalMaterialRegistry(BaseMaterialRegistry):
-    def __init__(self, g4_registry):
-        self.lar_temperature = 88.8 * u.K
-        super().__init__(g4_registry)
-
-    @cached_property
-    def liquidargon(self):
-        lar = g4.Material(
-            name="liquid_argon", density=1.390, number_of_components=1,
-            state="liquid", temperature=float(self.lar_temperature.m_as(u.kelvin)),
-            pressure=1.0e5, registry=self.g4_registry)
-        lar.add_element_natoms(self.get_element("Ar"), 1)
-        pygeomoptics.lar.pyg4_lar_attach_rindex(lar, self.g4_registry)
-        pygeomoptics.lar.pyg4_lar_attach_attenuation(
-            lar_mat=lar, reg=self.g4_registry, lar_temperature=self.lar_temperature,
-            lar_dielectric_method="cern2020",
-            attenuation_method_or_length="legend200-llama",
-            rayleigh_enabled_or_length=True,
-            absorption_enabled_or_length=True)
-        pygeomoptics.lar.pyg4_lar_attach_scintillation(
-            lar, self.g4_registry, flat_top_yield=1000/u.MeV)
-        return lar
-
-    @cached_property
-    def pmma(self):
-        m = g4.Material(name="pmma", density=1.20, number_of_components=3, registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("C"),5)
-        m.add_element_natoms(self.get_element("H"),8)
-        m.add_element_natoms(self.get_element("O"),2)
-        pygeomoptics.fibers.pyg4_fiber_cladding1_attach_rindex(m, self.g4_registry)
-        return m
-
-    @cached_property
-    def pmma_out(self):
-        m = g4.Material(name="pmma_cl2", density=1.20, number_of_components=3, registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("C"),5)
-        m.add_element_natoms(self.get_element("H"),8)
-        m.add_element_natoms(self.get_element("O"),2)
-        pygeomoptics.fibers.pyg4_fiber_cladding2_attach_rindex(m, self.g4_registry)
-        return m
-
-    @cached_property
-    def ps_fibers(self):
-        m = g4.Material(name="ps_fibers", density=1.05, number_of_components=2, registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("C"),8)
-        m.add_element_natoms(self.get_element("H"),8)
-        pygeomoptics.fibers.pyg4_fiber_core_attach_rindex(m, self.g4_registry)
-        pygeomoptics.fibers.pyg4_fiber_core_attach_absorption(m, self.g4_registry)
-        pygeomoptics.fibers.pyg4_fiber_core_attach_wls(m, self.g4_registry)
-        pygeomoptics.fibers.pyg4_fiber_core_attach_scintillation(m, self.g4_registry)
-        return m
-
-    @cached_property
-    def metal_silicon(self):
-        m = g4.Material(name="metal_silicon", density=2.33, number_of_components=1, registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("Si"),1)
-        return m
-
-    @cached_property
-    def metal_copper(self):
-        m = g4.Material(name="metal_copper", density=8.96, number_of_components=1, registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("Cu"),1)
-        return m
-
-    @cached_property
-    def tetratex(self):
-        m = g4.Material(name="tetratex", density=2.2, number_of_components=1, registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("C"),1)
-        return m
-
-    @cached_property
-    def tpb_on_fibers(self):
-        m = g4.Material(name="tpb_on_fibers", density=1.08, number_of_components=2, state="solid", registry=self.g4_registry)
-        m.add_element_natoms(self.get_element("H"),22)
-        m.add_element_natoms(self.get_element("C"),28)
-        pygeomoptics.tpb.pyg4_tpb_attach_rindex(m, self.g4_registry)
-        pygeomoptics.tpb.pyg4_tpb_attach_wls(m, self.g4_registry)
-        return m
-
-   
-    @cached_property
-    def surfaces(self):
-        class S:
-            def __init__(self, reg):
-
-            # -------------------------
-            # LAr → TPB
-            # -------------------------
-                self.lar_to_tpb = g4.solid.OpticalSurface(
-                name="os_lar_tpb",
-                model="unified",
-                finish="ground",
-                surf_type="dielectric_dielectric",
-                value=1.0,
-                registry=reg,
-            )
-
-                self.lar_to_tpb.addConstProperty("SIGMA_ALPHA", 0.2)
-                self.lar_to_tpb.addConstProperty("DIFFUSELOBECONSTANT", 0.7)
-                self.lar_to_tpb.addConstProperty("SPECULARLOBECONSTANT", 0.2)
-                self.lar_to_tpb.addConstProperty("SPECULARSPIKECONSTANT", 0.1)
-                self.lar_to_tpb.addConstProperty("BACKSCATTERCONSTANT", 0.0)
-
-            # -------------------------
-            # LAr → SiPM
-            # -------------------------
-                self.to_sipm_silicon = g4.solid.OpticalSurface(
-                name="os_lar_sipm",
-                model="unified",
-                finish="polished",
-                surf_type="dielectric_metal",
-                value=1.0,
-                registry=reg,
-            )
-
-                self.to_sipm_silicon.addConstProperty("SIGMA_ALPHA", 0.05)
-                self.to_sipm_silicon.addConstProperty("SPECULARSPIKECONSTANT", 0.6)
-                self.to_sipm_silicon.addConstProperty("SPECULARLOBECONSTANT", 0.3)
-                self.to_sipm_silicon.addConstProperty("DIFFUSELOBECONSTANT", 0.1)
-                self.to_sipm_silicon.addConstProperty("BACKSCATTERCONSTANT", 0.0)
-
-        return S(self.g4_registry)
-
-# ============================================================
-# Dummy Instrumentation
+# Dummy container (NO world, NO geometry)
 # ============================================================
 class DummyB:
-    def __init__(self):
-        self.registry = reg
-        self.materials = OpticalMaterialRegistry(reg)
+    def __init__(self, registry, materials, hpge_string):
+        self.registry = registry
+        self.materials = materials
         self.runtime_config = {}
 
-        class C:
-            def __init__(self,x,y): self.x_in_mm=x; self.y_in_mm=y
-        class S:
-            def __init__(self,a,r): self.angle_in_deg=a; self.radius_in_mm=r; self.center=C(0,0)
+        # Metadata for fiber placement
+        self.special_metadata = type("", (), {})()
+        self.special_metadata.hpge_string = hpge_string
 
-        self.special_metadata = type("",(),{})()
-        self.special_metadata.hpge_string = {
-        # ---------- inner shell ----------
-        "0": S(0,   150),
-        "1": S(120, 150),
-        "2": S(240, 150),
-
-        # ---------- outer shell (rotated by 60°) ----------
-        "3": S(60,  170),
-        "4": S(180, 170),
-        "5": S(300, 170),
-        }
-
-        world = g4.solid.Box("world",4000,4000,4000,reg)
-        self.mother_lv = g4.LogicalVolume(world, self.materials.liquidargon, "world_lv", reg)
-        self.mother_pv = g4.PhysicalVolume([0,0,0],[0,0,0],self.mother_lv,"world_pv",None,reg)
-        reg.setWorld(self.mother_lv)
-
-b = DummyB()
 
 # ============================================================
-# 3 fiber modules → 360°
+# Fiber builder
 # ============================================================
-mods = []
-for i in range(6):
-    mods.append(
-        FiberModuleData(
-            barrel="inner",
-            name=f"IB{i}",
-            tpb_thickness=150,
-            channel_top_name=f"sipm_top_{i}",
-            channel_bottom_name=f"sipm_bot_{i}",
-            channel_top_rawid=1000 + 2*i,
-            channel_bottom_rawid=1001 + 2*i,
-            string_id=str(i),
+def build_fiber_shroud(registry, lar_pv, hpge_string, materials):
+    """
+    Build 360° LEGEND fiber shroud and attach SiPMs
+    inside the existing LAr physical volume.
+    """
+
+    # ------------------------------------------------------------
+    # 1) Container for pygeoml1000
+    # ------------------------------------------------------------
+    b = DummyB(registry, materials, hpge_string)
+
+    # Tell pygeoml1000 where to place geometry
+    b.mother_lv = lar_pv.logicalVolume
+    b.mother_pv = lar_pv
+    b.mother_z_displacement = 0.0
+    b.mother_x_displacement = 0.0
+
+    # This is the CRITICAL line: attach new PVs to LAr_pv
+    registry._world = lar_pv
+
+    # ------------------------------------------------------------
+    # 2) Define fiber modules
+    # ------------------------------------------------------------
+    mods = []
+    for i in range(6):
+        mods.append(
+            FiberModuleData(
+                barrel="inner",
+                name=f"IB{i}",
+                tpb_thickness=150,  # nm
+                channel_top_name=f"sipm_top_{i}",
+                channel_bottom_name=f"sipm_bot_{i}",
+                channel_top_rawid=1000 + 2 * i,
+                channel_bottom_rawid=1001 + 2 * i,
+                string_id=str(i),
+            )
         )
+
+    # ------------------------------------------------------------
+    # 3) Fiber factory
+    # ------------------------------------------------------------
+    factory = ModuleFactorySingleFibers(
+        radius_mm=50,
+        fiber_length_mm=200,
+        fiber_count_per_module=45,
+        bend_radius_mm=None,
+        number_of_modules=6,
+        z_displacement_mm=100,
+        materials=materials,
+        registry=registry,
     )
 
+    # ------------------------------------------------------------
+    # 4) Build fibers + SiPMs inside LAr
+    # ------------------------------------------------------------
+    for m in mods:
+        factory.create_module(m, b)
 
-factory = ModuleFactorySingleFibers(
-    radius_mm=150,
-    fiber_length_mm=1200,
-    fiber_count_per_module=30,
-    bend_radius_mm=None,
-    number_of_modules=6,
-    z_displacement_mm=0,
-    materials=b.materials,
-    registry=reg,
-)
-
-for m in mods:
-    factory.create_module(m,b)
-
-print("Fiber shroud successfully built")
-viewer = pg4.visualisation.VtkViewerColoured(
-    materialVisOptions={
-        "liquid_argon":  [0.6, 0.8, 1.0, 0.10],
-        "ps_fibers":    [0.0, 1.0, 0.0, 0.8],
-        "pmma":         [0.8, 0.8, 0.8, 0.4],
-        "pmma_cl2":     [0.4, 0.4, 0.4, 0.4],
-        "tpb_on_fibers":[1.0, 1.0, 0.0, 0.6],
-        "metal_silicon":[1.0, 0.0, 0.0, 1.0],
-        "metal_copper":[1.0, 0.5, 0.0, 1.0],
-        "tetratex":     [1.0, 1.0, 1.0, 0.6],
+    # ------------------------------------------------------------
+    # 5) Collect SiPM physical volumes
+    # ------------------------------------------------------------
+    sipms = {
+        pv.name: pv
+        for pv in registry.physicalVolumeDict.values()
+        if pv.name.startswith("sipm_")
     }
-)
 
-viewer.addLogicalVolume(b.mother_lv)
-viewer.view()
-write_pygeom(reg, "fibers360.gdml")
-print("Saved fibers360.gdml")
-
-
+    return sipms
